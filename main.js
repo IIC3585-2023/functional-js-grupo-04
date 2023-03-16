@@ -6,6 +6,12 @@ const addSpacesFollowedDot = (text, n) => text.split(". ").map(
     ).join("");
 
 
+// Cada párrafo debe estar separado por ​n​ líneas (después de un punto aparte)
+const addLinesSeparateDot = (text, n) => text.split(".\n").map(
+    (sentence, index) => index > 0 ? sentence = "." + "\n".repeat(n) + sentence : sentence = sentence
+    ).join("");
+
+
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator = (...functions) => (text, n) => functions.reduce((acc, f) => f(acc, n), text);
@@ -15,6 +21,7 @@ const sCombinator = (...functions) => (text, n) => functions.reduce((acc, f) => 
 // Main function
 const transformText = sCombinator(
     addSpacesFollowedDot,
+    addLinesSeparateDot
 );
 
 
