@@ -1,15 +1,13 @@
 
 
 // Cada frase debe comenzar con ​n​ espacios en blanco (después de un punto seguido)
-const addSpacesFollowedDot = (text, n) => text.replace(/\. +/g, ". ")   // clean text
-    .split(". ").map(
+const addSpacesFollowedDot = (text, n) => cleanText2(text).split(". ").map(
     (sentence, index) => index > 0 ? sentence = "." + " ".repeat(n) + sentence : sentence = sentence
     ).join("");
 
 
 // Cada párrafo debe estar separado por ​n​ líneas (después de un punto aparte)
-const addLinesSeparateDot = (text, n) => text.replace(/\n +/g, "\n").replace(/\n+/g, "\n")   // clean text
-    .split(".\n").map(
+const addLinesSeparateDot = (text, n) => cleanText1(text).split(".\n").map(
     (sentence, index) => index > 0 ? sentence = "." + "\n".repeat(n) + sentence : sentence = sentence
     ).join("");
 
@@ -33,15 +31,15 @@ const transformText = sCombinator(
 const buttonClick = () => {
     const text = document.getElementById("text").value;
     const result = document.getElementById("result");
-    result.innerHTML = transformText(text, 5);
+    result.innerHTML = transformText(text, n=5);
 }
 
 //////////////////////////////////////////////////////
 
 
-// // Clean text helper
+// // Clean text helpers
 // // trim both sides of all /n and replace a lot of lines with a single line
-// const cleanText1 = (text) => text.replace(/\n +/g, "\n").replace(/\n+/g, "\n");
+const cleanText1 = (text) => text.replace(/\n +/g, "\n").replace(/\n+/g, "\n");
 
 // // if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
-// const cleanText2 = (text) => text.replace(/\. +/g, ". ")
+const cleanText2 = (text) => text.replace(/\. +/g, ". ");
