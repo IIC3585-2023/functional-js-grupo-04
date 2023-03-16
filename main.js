@@ -13,7 +13,7 @@ const transformText = (text) => {
 //////////////////////////////////////////////////////
 // HTML code
 const buttonClick = () => {
-    const text = document.getElementById("text").innerHTML;
+    const text = document.getElementById("text").value;
     const result = document.getElementById("result");
     result.innerHTML = transformText(text);
 }
