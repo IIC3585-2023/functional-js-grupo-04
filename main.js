@@ -1,12 +1,21 @@
 
 
+// Cada frase debe comenzar con ​n​ espacios en blanco (después de un punto seguido)
+const addSpacesFollowedDot = (text, n) => text.split(". ").map(
+    (sentence, index) => index > 0 ? sentence = "." + " ".repeat(n) + sentence : sentence = sentence
+    ).join("");
 
 
-const transformText = (text) => {
-    return text;
-}
+
+// Combinator inspired by: const S = f => g => x => f(x)(g(x))
+const sCombinator = (...functions) => (text, n) => functions.reduce((acc, f) => f(acc, n), text);
 
 
+
+// Main function
+const transformText = sCombinator(
+    addSpacesFollowedDot,
+);
 
 
 
@@ -15,7 +24,7 @@ const transformText = (text) => {
 const buttonClick = () => {
     const text = document.getElementById("text").innerHTML;
     const result = document.getElementById("result");
-    result.innerHTML = transformText(text);
+    result.innerHTML = transformText(text, n=10);
 }
 
 //////////////////////////////////////////////////////
