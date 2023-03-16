@@ -1,4 +1,4 @@
-# Group 4 - Advanced Web Application Design
+# Group 4
 ## Members
 - [Rocío Torres](https://github.com/gore26)
 - [Vicente García](https://github.com/VicenteGM123)
