@@ -13,9 +13,9 @@ const addLinesSeparateDot = (text, n) => cleanText1(text).split(".\n").map(
 
 
 
+
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator = (...functions) => (text, n) => functions.reduce((acc, f) => f(acc, n), text);
-
 
 
 // Main function
@@ -38,8 +38,9 @@ const buttonClick = () => {
 
 
 // // Clean text helpers
-// // trim both sides of all /n and replace a lot of lines with a single line
-const cleanText1 = (text) => text.replace(/\n +/g, "\n").replace(/\n+/g, "\n");
 
-// // if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
+// trim spaces of every "/n" and replace it with a single "/n"
+const cleanText1 = (text) => text.replace(/ +\n/g, "\n").replace(/\n+/g, "\n").replace(/\n +/g, "\n");
+
+// if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
 const cleanText2 = (text) => text.replace(/\. +/g, ". ");
