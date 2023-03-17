@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Text transformation - G4</title>
@@ -10,43 +10,67 @@
 
     <script src="main.js"></script>
     <link rel="stylesheet" href="index.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-    <script>
-        function uploadFile() {
-            let file = document.getElementById("file").files[0];
-            let reader = new FileReader();
-            reader.onload = function (e) {
-                let text = e.target.result;
-                let result = document.getElementById("text");
-                result.value = text;
-            };
-            reader.readAsText(file);
-        }
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
 
-        function downloadFile() {
-            let text = document.getElementById("result").value;
-            let element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-            element.setAttribute('download', "result.txt");
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
+    <script>
+      function uploadFile() {
+        let file = document.getElementById("file").files[0];
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          let text = e.target.result;
+          let result = document.getElementById("text");
+          result.value = text;
+        };
+        reader.readAsText(file);
+      }
+
+      function downloadFile() {
+        let text = document.getElementById("result").value;
+        let element = document.createElement("a");
+        element.setAttribute(
+          "href",
+          "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+        );
+        element.setAttribute("download", "result.txt");
+        element.style.display = "none";
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      }
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <h2>Text transformation - Group 4</h2>
-    <input type="file" id="file" name="file" accept=".txt" onchange="uploadFile()">
-    <textarea id="text" class="text-area" spellcheck="false" placeholder="Enter text here">
+    <input
+      type="file"
+      id="file"
+      name="file"
+      accept=".txt"
+      onchange="uploadFile()"
+    />
+    <textarea
+      id="text"
+      class="text-area"
+      spellcheck="false"
+      placeholder="Enter text here"
+    >
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit.
 Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue.
 Nam tincidunt congue enim, ut porta lorem lacinia consectetur.
-Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea>
+Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
+    >
     <button class="btn" onclick="buttonClick()">Transform</button>
-    <textarea id="result" class="text-area" spellcheck="false" placeholder="Result" readonly></textarea>
+    <textarea
+      id="result"
+      class="text-area"
+      spellcheck="false"
+      placeholder="Result"
+      readonly
+    ></textarea>
     <button class="btn" onclick="downloadFile()">Download Result</button>
-</body>
+  </body>
 </html>
