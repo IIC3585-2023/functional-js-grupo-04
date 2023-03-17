@@ -48,3 +48,19 @@ body{
     font-size: 16px;
     resize: none;
 }
+
+#file::file-selector-button {
+    border: none;
+    background: var(--btn-color);
+    padding: 13px 25px;
+    margin: 20px;
+    color: var(--text-color-2);
+    cursor: pointer;
+    font-size: 16px;
+    transition: all .2s ease-in-out;
+  }
+  
+#file::file-selector-button:hover {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
