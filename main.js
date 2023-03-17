@@ -39,7 +39,7 @@ const buttonClick = () => {
 
 // // Clean text helpers
 
-// trim spaces of every "/n" and replace it with a single "/n"
+// trim spaces of every "/n" and replace "\n...\n" with a single "/n"
 const cleanText1 = (text) => text.replace(/ +\n/g, "\n").replace(/\n+/g, "\n").replace(/\n +/g, "\n");
 
 // if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
