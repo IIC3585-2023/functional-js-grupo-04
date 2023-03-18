@@ -11,7 +11,7 @@ const addSpacesFollowedDot = (text, n) =>
 
 // Cada párrafo debe estar separado por ​n​ líneas (después de un punto aparte)
 const addLinesSeparateDot = (text, n) =>
-  text
+  cleanText1(text)
     .split(".\n")
     .map((sentence, index) =>
       index > 0
@@ -23,10 +23,9 @@ const addLinesSeparateDot = (text, n) =>
 // Cada párrafo debe tener ​n​ espacios de sangría
 const addIndentation = (text, n) =>
   text
-    .split(".\n")
-    .map((paragraph, index) =>
-      index != 0 ? ".\n" + " ".repeat(n) + paragraph : " ".repeat(n) + paragraph
-    )
+    .split(/(.*\n+)/)
+    .filter((x) => x != "")
+    .map((paragraph) => " ".repeat(n) + paragraph)
     .join("");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
@@ -36,7 +35,11 @@ const sCombinator =
     functions.reduce((acc, f) => f(acc, n), text);
 
 // Main function
-const transformText = sCombinator(addIndentation, addLinesSeparateDot);
+const transformText = sCombinator(
+  addSpacesFollowedDot,
+  addLinesSeparateDot,
+  addIndentation
+);
 
 //////////////////////////////////////////////////////
 // HTML code
