@@ -15,7 +15,7 @@ const addLinesSeparateDot = (text, n) =>
     .split(".\n")
     .map((sentence, index) =>
       index > 0
-        ? (sentence = "." + "\n".repeat(n) + sentence)
+        ? (sentence = "." + "\n".repeat(n + 1) + sentence)
         : (sentence = sentence)
     )
     .join("");
@@ -23,22 +23,40 @@ const addLinesSeparateDot = (text, n) =>
 // El ancho del texto debe ser a lo más ​n​ (sin cortar palabras)
 const addMaxWidth = (text, n) =>
   text
-    .split(" ")
+    .split(/(\s+)+/)
+    .map((string) =>
+      /^ *$/.test(string)
+        ? string.split("").map((element) => (element === " " ? element : ""))
+        : string
+    )
+    .map((string) =>
+      /[\s+][\n+]/.test(string)
+        ? string.split("").map((element) => (element === " " ? element : "\n"))
+        : string
+    )
+    .filter((x) => x != "")
+    .flat()
     .reduce(
       (accumulator, new_word) =>
-        accumulator.current_line_characters + new_word.length + 1 > n
+        new_word.includes("\n")
+          ? {
+              current_line_characters: 0,
+              current_text: accumulator.current_text + new_word,
+            }
+          : accumulator.current_line_characters + new_word.length > n
           ? {
               current_line_characters: new_word.length,
               current_text: accumulator.current_text + "\n" + new_word,
             }
           : {
               current_line_characters:
-                accumulator.current_line_characters + new_word.length + 1,
-              current_text: accumulator.current_text + " " + new_word,
+                accumulator.current_line_characters + new_word.length,
+              current_text: accumulator.current_text + new_word,
             },
+
       { current_line_characters: 0, current_text: "" }
     )
-    .current_text.trimStart();
+    .current_text.replace(/(\n) (\w)/g, "$1$2"); // borra espacios los a la izquierda. Puede traer problemas pero se ve mejor. Quizas borrar.
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
@@ -71,3 +89,10 @@ const cleanText1 = (text) =>
 
 // if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
 const cleanText2 = (text) => text.replace(/\. +/g, ". ");
+
+console.log(
+  transformText(
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nDonec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit",
+    15
+  )
+);
