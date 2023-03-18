@@ -59,10 +59,3 @@ const cleanText1 = (text) =>
 
 // if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
 const cleanText2 = (text) => text.replace(/\. +/g, ". ");
-
-console.log(
-  transformText(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nDonec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit",
-    15
-  )
-);
