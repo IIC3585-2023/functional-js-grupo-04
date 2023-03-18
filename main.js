@@ -20,43 +20,20 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
-// El ancho del texto debe ser a lo más ​n​ (sin cortar palabras)
-const addMaxWidth = (text, n) =>
+//Se ignoran los párrafos que tienen menos de ​n​ frases
+const ignoreShortParagraphs = (text, n) =>
   text
-    .split(/(\s+)+/)
-    .map((string) =>
-      /^ *$/.test(string)
-        ? string.split("").map((element) => (element === " " ? element : ""))
-        : string
+    .split(".\n")
+    .filter((paragraph) =>
+      paragraph.match(/\./g) ? paragraph.match(/\./g).length + 1 >= n : 1 >= n
     )
-    .map((string) =>
-      /[\s+][\n+]/.test(string)
-        ? string.split("").map((element) => (element === " " ? element : "\n"))
-        : string
+    .map((paragraph, index, paragraphs_array) =>
+      index == paragraphs_array.length - 1
+        ? (paragraph = paragraph)
+        : (paragraph = paragraph + ".")
     )
-    .filter((x) => x != "")
-    .flat()
-    .reduce(
-      (accumulator, new_word) =>
-        new_word.includes("\n")
-          ? {
-              current_line_characters: 0,
-              current_text: accumulator.current_text + new_word,
-            }
-          : accumulator.current_line_characters + new_word.length > n
-          ? {
-              current_line_characters: new_word.length,
-              current_text: accumulator.current_text + "\n" + new_word,
-            }
-          : {
-              current_line_characters:
-                accumulator.current_line_characters + new_word.length,
-              current_text: accumulator.current_text + new_word,
-            },
-
-      { current_line_characters: 0, current_text: "" }
-    )
-    .current_text.replace(/(\n) (\w)/g, "$1$2"); // borra espacios los a la izquierda. Puede traer problemas pero se ve mejor. Quizas borrar.
+    .join("\n")
+    .replace(/^[\r\n]+/, ""); // Se eliminan los
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
@@ -66,9 +43,9 @@ const sCombinator =
 
 // Main function
 const transformText = sCombinator(
-  addSpacesFollowedDot,
+  ignoreShortParagraphs,
   addLinesSeparateDot,
-  addMaxWidth
+  addSpacesFollowedDot
 );
 
 //////////////////////////////////////////////////////
@@ -76,7 +53,7 @@ const transformText = sCombinator(
 const buttonClick = () => {
   const text = document.getElementById("text").value;
   const result = document.getElementById("result");
-  result.innerHTML = transformText(text, (n = 15));
+  result.innerHTML = transformText(text, (n = 2));
 };
 
 //////////////////////////////////////////////////////
@@ -93,6 +70,6 @@ const cleanText2 = (text) => text.replace(/\. +/g, ". ");
 console.log(
   transformText(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nDonec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit",
-    15
+    2
   )
 );
