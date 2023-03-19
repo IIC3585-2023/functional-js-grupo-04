@@ -20,32 +20,45 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
-// Cada párrafo debe tener ​n​ espacios de sangría
-const addIndentation = (text, n) =>
-  text
-    .split(/(.*\n+)/)
-    .filter((x) => x != "")
-    .map((paragraph) => " ".repeat(n) + paragraph)
-    .join("");
-
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
   (...functions) =>
   (text, n) =>
     functions.reduce((acc, f) => f(acc, n), text);
 
-// Main function
-const transformText = sCombinator(
-  addSpacesFollowedDot,
-  addLinesSeparateDot,
-  addIndentation
-);
-
 //////////////////////////////////////////////////////
 // HTML code
+
+const optionClick = (clicked_button) => {
+  console.log(clicked_button.classList);
+  if (clicked_button.classList.contains("option-button-active")) {
+    clicked_button.classList.remove("option-button-active");
+  } else {
+    clicked_button.classList.add("option-button-active");
+  }
+};
+
+const getFunctionsSelected = () => {
+  const option_buttons_functions = {
+    "add-spaces-followed-dot": addSpacesFollowedDot,
+    "add-lines-separate-dot": addLinesSeparateDot,
+  };
+  const filtered_functions = Object.keys(option_buttons_functions).filter(
+    (option_button_id) =>
+      document
+        .getElementById(option_button_id)
+        .classList.contains("option-button-active")
+  );
+  return filtered_functions.map(
+    (option_button_id) => option_buttons_functions[option_button_id]
+  );
+};
+
 const buttonClick = () => {
   const text = document.getElementById("text").value;
   const result = document.getElementById("result");
+  const functions_selected = getFunctionsSelected();
+  const transformText = sCombinator(...functions_selected);
   result.innerHTML = transformText(text, (n = 15));
 };
 
