@@ -61,7 +61,9 @@ const ignoreShortParagraphs = (text, n) =>
   text
     .split(".\n")
     .map((paragraph) => paragraph.split("."))
-    .filter((sentences) => sentences.length >= n);
+    .filter((sentences) => sentences.length >= n)
+    .map((paragraph) => paragraph.join("."))
+    .join(".\n");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
@@ -73,7 +75,6 @@ const sCombinator =
 // HTML code
 
 const optionClick = (clicked_button) => {
-  console.log(clicked_button.classList);
   if (clicked_button.classList.contains("option-button-active")) {
     clicked_button.classList.remove("option-button-active");
   } else {
@@ -105,7 +106,7 @@ const buttonClick = () => {
   const result = document.getElementById("result");
   const functions_selected = getFunctionsSelected();
   const transformText = sCombinator(...functions_selected);
-  result.innerHTML = transformText(text, (n = 15));
+  result.innerHTML = transformText(text, (n = 2));
 };
 
 //////////////////////////////////////////////////////
