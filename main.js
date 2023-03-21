@@ -23,10 +23,13 @@ const addLinesSeparateDot = (text, n) =>
 // Cada párrafo debe tener ​n​ espacios de sangría
 const addIndentation = (text, n) =>
   text
-    .split(/(.*\n+)/)
-    .filter((x) => x != "")
-    .map((paragraph) => " ".repeat(n) + paragraph)
-    .join("");
+    .split(".\n")
+    .map((paragraph, index) =>
+      index > 0
+        ? paragraph.replace(/^\n*/, "$&" + " ".repeat(n))
+        : " ".repeat(n) + paragraph
+    )
+    .join(".\n");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
