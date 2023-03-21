@@ -56,6 +56,13 @@ const addIndentation = (text, n) =>
     )
     .join(".\n");
 
+//Se ignoran los párrafos que tienen menos de ​n​ frases
+const ignoreShortParagraphs = (text, n) =>
+  text
+    .split(".\n")
+    .map((paragraph) => paragraph.split("."))
+    .filter((sentences) => sentences.length >= n);
+
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
   (...functions) =>
@@ -79,6 +86,7 @@ const getFunctionsSelected = () => {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
     "add-identation": addIndentation,
+    "ignore-short-paragraphs": ignoreShortParagraphs,
     "add-max-width": addMaxWidth,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
