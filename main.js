@@ -20,62 +20,45 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
-// El ancho del texto debe ser a lo más ​n​ (sin cortar palabras)
-const addMaxWidth = (text, n) =>
-  text
-    .split(/(\s+)+/)
-    .map((string) =>
-      /^ *$/.test(string)
-        ? string.split("").map((element) => (element === " " ? element : ""))
-        : string
-    )
-    .map((string) =>
-      /[\s+][\n+]/.test(string)
-        ? string.split("").map((element) => (element === " " ? element : "\n"))
-        : string
-    )
-    .filter((x) => x != "")
-    .flat()
-    .reduce(
-      (accumulator, new_word) =>
-        new_word.includes("\n")
-          ? {
-              current_line_characters: 0,
-              current_text: accumulator.current_text + new_word,
-            }
-          : accumulator.current_line_characters + new_word.length > n
-          ? {
-              current_line_characters: new_word.length,
-              current_text: accumulator.current_text + "\n" + new_word,
-            }
-          : {
-              current_line_characters:
-                accumulator.current_line_characters + new_word.length,
-              current_text: accumulator.current_text + new_word,
-            },
-
-      { current_line_characters: 0, current_text: "" }
-    )
-    .current_text.replace(/(\n) (\w)/g, "$1$2"); // borra espacios los a la izquierda. Puede traer problemas pero se ve mejor. Quizas borrar.
-
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
   (...functions) =>
   (text, n) =>
     functions.reduce((acc, f) => f(acc, n), text);
 
-// Main function
-const transformText = sCombinator(
-  addSpacesFollowedDot,
-  addLinesSeparateDot,
-  addMaxWidth
-);
-
 //////////////////////////////////////////////////////
 // HTML code
+
+const optionClick = (clicked_button) => {
+  console.log(clicked_button.classList);
+  if (clicked_button.classList.contains("option-button-active")) {
+    clicked_button.classList.remove("option-button-active");
+  } else {
+    clicked_button.classList.add("option-button-active");
+  }
+};
+
+const getFunctionsSelected = () => {
+  const option_buttons_functions = {
+    "add-spaces-followed-dot": addSpacesFollowedDot,
+    "add-lines-separate-dot": addLinesSeparateDot,
+  };
+  const filtered_functions = Object.keys(option_buttons_functions).filter(
+    (option_button_id) =>
+      document
+        .getElementById(option_button_id)
+        .classList.contains("option-button-active")
+  );
+  return filtered_functions.map(
+    (option_button_id) => option_buttons_functions[option_button_id]
+  );
+};
+
 const buttonClick = () => {
   const text = document.getElementById("text").value;
   const result = document.getElementById("result");
+  const functions_selected = getFunctionsSelected();
+  const transformText = sCombinator(...functions_selected);
   result.innerHTML = transformText(text, (n = 15));
 };
 
