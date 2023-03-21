@@ -20,6 +20,7 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
+// El ancho del texto debe ser a lo más ​n​ (sin cortar palabras)
 const addMaxWidth = (text, n) => {
   const paragraphs = text.split(".\n");
   return paragraphs
@@ -44,6 +45,17 @@ const addMaxWidth = (text, n) => {
     .join(".\n");
 };
 
+// Cada párrafo debe tener ​n​ espacios de sangría
+const addIndentation = (text, n) =>
+  text
+    .split(".\n")
+    .map((paragraph, index) =>
+      index > 0
+        ? paragraph.replace(/^\n*/, "$&" + " ".repeat(n))
+        : " ".repeat(n) + paragraph
+    )
+    .join(".\n");
+
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
   (...functions) =>
@@ -66,6 +78,7 @@ const getFunctionsSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
+    "add-identation": addIndentation,
     "add-max-width": addMaxWidth,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
