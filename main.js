@@ -20,6 +20,30 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
+const addMaxWidth = (text, n) => {
+  const paragraphs = text.split(".\n");
+  return paragraphs
+    .map((paragraph) =>
+      splitStringWithSingleSpaces(paragraph).reduce(
+        (accumulator, new_word) =>
+          accumulator.current_line_characters + new_word.length > n
+            ? {
+                current_line_characters: new_word.length,
+                current_text: accumulator.current_text + "\n" + new_word,
+              }
+            : {
+                current_line_characters:
+                  accumulator.current_line_characters + new_word.length,
+                current_text: accumulator.current_text + new_word,
+              },
+
+        { current_line_characters: 0, current_text: "" }
+      )
+    )
+    .map((paragraphObject) => paragraphObject.current_text)
+    .join(".\n");
+};
+
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
   (...functions) =>
@@ -42,6 +66,7 @@ const getFunctionsSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
+    "add-max-width": addMaxWidth,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
     (option_button_id) =>
@@ -64,7 +89,7 @@ const buttonClick = () => {
 
 //////////////////////////////////////////////////////
 
-// // Clean text helpers
+// // helpers
 
 // trim spaces of every "/n" and replace "\n...\n" with a single "/n"
 const cleanText1 = (text) =>
@@ -72,3 +97,9 @@ const cleanText1 = (text) =>
 
 // if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
 const cleanText2 = (text) => text.replace(/\. +/g, ". ");
+
+const splitStringWithSingleSpaces = (string) =>
+  string
+    .split(/(\s+)/)
+    .map((word) => (word.match(/\s+/) ? word.split("") : word))
+    .flat();
