@@ -24,16 +24,9 @@ const addLinesSeparateDot = (text, n) =>
 const ignoreShortParagraphs = (text, n) =>
   text
     .split(".\n")
-    .filter((paragraph) =>
-      paragraph.match(/\./g) ? paragraph.match(/\./g).length + 1 >= n : 1 >= n
-    )
-    .map((paragraph, index, paragraphs_array) =>
-      index == paragraphs_array.length - 1
-        ? (paragraph = paragraph)
-        : (paragraph = paragraph + ".")
-    )
-    .join("\n")
-    .replace(/^[\r\n]+/, ""); // Se eliminan los
+    .map((paragraph) => paragraph.split("."))
+    .filter((sentences) => sentences.length >= n)
+    .join(".\n");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
