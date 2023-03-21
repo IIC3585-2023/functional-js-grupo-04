@@ -20,13 +20,48 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
+// El ancho del texto debe ser a lo más ​n​ (sin cortar palabras)
+const addMaxWidth = (text, n) => {
+  const paragraphs = text.split(".\n");
+  return paragraphs
+    .map((paragraph) =>
+      splitStringWithSingleSpaces(paragraph).reduce(
+        (accumulator, new_word) =>
+          accumulator.current_line_characters + new_word.length > n
+            ? {
+                current_line_characters: new_word.length,
+                current_text: accumulator.current_text + "\n" + new_word,
+              }
+            : {
+                current_line_characters:
+                  accumulator.current_line_characters + new_word.length,
+                current_text: accumulator.current_text + new_word,
+              },
+
+        { current_line_characters: 0, current_text: "" }
+      )
+    )
+    .map((paragraphObject) => paragraphObject.current_text)
+    .join(".\n");
+};
+
+// Cada párrafo debe tener ​n​ espacios de sangría
+const addIndentation = (text, n) =>
+  text
+    .split(".\n")
+    .map((paragraph, index) =>
+      index > 0
+        ? paragraph.replace(/^\n*/, "$&" + " ".repeat(n))
+        : " ".repeat(n) + paragraph
+    )
+    .join(".\n");
+
 //Se ignoran los párrafos que tienen menos de ​n​ frases
 const ignoreShortParagraphs = (text, n) =>
   text
     .split(".\n")
     .map((paragraph) => paragraph.split("."))
-    .filter((sentences) => sentences.length >= n)
-    .join(".\n");
+    .filter((sentences) => sentences.length >= n);
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
@@ -34,24 +69,48 @@ const sCombinator =
   (text, n) =>
     functions.reduce((acc, f) => f(acc, n), text);
 
-// Main function
-const transformText = sCombinator(
-  ignoreShortParagraphs,
-  addLinesSeparateDot,
-  addSpacesFollowedDot
-);
-
 //////////////////////////////////////////////////////
 // HTML code
+
+const optionClick = (clicked_button) => {
+  console.log(clicked_button.classList);
+  if (clicked_button.classList.contains("option-button-active")) {
+    clicked_button.classList.remove("option-button-active");
+  } else {
+    clicked_button.classList.add("option-button-active");
+  }
+};
+
+const getFunctionsSelected = () => {
+  const option_buttons_functions = {
+    "add-spaces-followed-dot": addSpacesFollowedDot,
+    "add-lines-separate-dot": addLinesSeparateDot,
+    "add-identation": addIndentation,
+    "ignore-short-paragraphs": ignoreShortParagraphs,
+    "add-max-width": addMaxWidth,
+  };
+  const filtered_functions = Object.keys(option_buttons_functions).filter(
+    (option_button_id) =>
+      document
+        .getElementById(option_button_id)
+        .classList.contains("option-button-active")
+  );
+  return filtered_functions.map(
+    (option_button_id) => option_buttons_functions[option_button_id]
+  );
+};
+
 const buttonClick = () => {
   const text = document.getElementById("text").value;
   const result = document.getElementById("result");
-  result.innerHTML = transformText(text, (n = 2));
+  const functions_selected = getFunctionsSelected();
+  const transformText = sCombinator(...functions_selected);
+  result.innerHTML = transformText(text, (n = 15));
 };
 
 //////////////////////////////////////////////////////
 
-// // Clean text helpers
+// // helpers
 
 // trim spaces of every "/n" and replace "\n...\n" with a single "/n"
 const cleanText1 = (text) =>
@@ -59,3 +118,9 @@ const cleanText1 = (text) =>
 
 // if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
 const cleanText2 = (text) => text.replace(/\. +/g, ". ");
+
+const splitStringWithSingleSpaces = (string) =>
+  string
+    .split(/(\s+)/)
+    .map((word) => (word.match(/\s+/) ? word.split("") : word))
+    .flat();
