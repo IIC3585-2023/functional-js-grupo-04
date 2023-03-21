@@ -60,9 +60,9 @@ const addIndentation = (text, n) =>
 const ignoreShortParagraphs = (text, n) =>
   text
     .split(".\n")
-    .map((paragraph) => paragraph.split("."))
+    .map((paragraph) => paragraph.split(/(?=[\.])/))
     .filter((sentences) => sentences.length >= n)
-    .map((paragraph) => paragraph.join("."))
+    .map((paragraph) => paragraph.join(""))
     .join(".\n");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
