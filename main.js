@@ -20,6 +20,24 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
+// Se ignoran los párrafos que tienen menos de n frases
+const ignoreParagraphsLessN = (text, n) =>
+  text
+  .split(".\n")
+  .map(paragraph => 
+    paragraph.split(".")
+    .filter(paragraph => paragraph != ""))
+  .filter(paragraph => paragraph.length <= n)
+  .map(sentences => sentences.join("."))
+  .join("\n");
+
+// Cada frase debe aparecer en párrafo aparte
+const addNewParagraphEachLine = (text) =>
+  cleanText3(text)
+  .split(".")
+  .map(paragraph => paragraph.replace("\n", ""))
+  .join(".\n");
+
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
   (...functions) =>
@@ -30,7 +48,6 @@ const sCombinator =
 // HTML code
 
 const optionClick = (clicked_button) => {
-  console.log(clicked_button.classList);
   if (clicked_button.classList.contains("option-button-active")) {
     clicked_button.classList.remove("option-button-active");
   } else {
@@ -42,6 +59,8 @@ const getFunctionsSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
+    "ignore-long-paragraphs": ignoreParagraphsLessN,
+    "each-line-paragraph": addNewParagraphEachLine,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
     (option_button_id) =>
@@ -59,7 +78,7 @@ const buttonClick = () => {
   const result = document.getElementById("result");
   const functions_selected = getFunctionsSelected();
   const transformText = sCombinator(...functions_selected);
-  result.innerHTML = transformText(text, (n = 15));
+  result.innerHTML = transformText(text, (n = 2));
 };
 
 //////////////////////////////////////////////////////
@@ -72,3 +91,6 @@ const cleanText1 = (text) =>
 
 // if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
 const cleanText2 = (text) => text.replace(/\. +/g, ". ");
+
+//If there is some spaces after the dot, it removes them.
+const cleanText3 = (text) => text.replace(/\. +/g, ".");
