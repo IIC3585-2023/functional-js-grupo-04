@@ -59,11 +59,11 @@ const addIndentation = (text, n) =>
 //Se ignoran los párrafos que tienen menos de ​n​ frases
 const ignoreShortParagraphs = (text, n) =>
   text
-    .split(".\n")
+    .split(/(?<=\.\n)/)
     .map((paragraph) => paragraph.split(/(?=[\.])/))
-    .filter((sentences) => sentences.length >= n)
+    .filter((sentences) => sentences.length - 1 >= n)
     .map((paragraph) => paragraph.join(""))
-    .join(".\n");
+    .join("");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
@@ -106,7 +106,7 @@ const buttonClick = () => {
   const result = document.getElementById("result");
   const functions_selected = getFunctionsSelected();
   const transformText = sCombinator(...functions_selected);
-  result.innerHTML = transformText(text, (n = 2));
+  result.innerHTML = transformText(text, (n = 3));
 };
 
 //////////////////////////////////////////////////////
