@@ -20,6 +20,19 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
+// Solo las primeras n frases de cada párrafo 
+const FirstPhrasesEachParagraph = (text, n) =>
+  text
+  .split(".\n")
+  .map(paragraph => paragraph.split(".", n).join("."))
+  .map((paragraph, index, paragraphs_array) =>
+    index < (paragraphs_array.length - 1)
+    ? (paragraph + ".")
+    : n > 1
+      ? paragraph 
+      : (paragraph + "."))
+  .join("\n");
+
 // El ancho del texto debe ser a lo más ​n​ (sin cortar palabras)
 const addMaxWidth = (text, n) => {
   const paragraphs = text.split(".\n");
@@ -86,6 +99,7 @@ const getFunctionsSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
+    "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
     "add-identation": addIndentation,
     "ignore-short-paragraphs": ignoreShortParagraphs,
     "add-max-width": addMaxWidth,
