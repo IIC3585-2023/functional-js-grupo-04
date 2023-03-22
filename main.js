@@ -20,19 +20,6 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
-// Solo las primeras n frases de cada párrafo 
-const FirstPhrasesEachParagraph = (text, n) =>
-  text
-  .split(".\n")
-  .map(paragraph => paragraph.split(".", n).join("."))
-  .map((paragraph, index, paragraphs_array) =>
-    index < (paragraphs_array.length - 1)
-    ? (paragraph + ".")
-    : n > 1
-      ? paragraph 
-      : (paragraph + "."))
-  .join("\n");
-
 // El ancho del texto debe ser a lo más ​n​ (sin cortar palabras)
 const addMaxWidth = (text, n) => {
   const paragraphs = text.split(".\n");
@@ -78,12 +65,11 @@ const ignoreShortParagraphs = (text, n) =>
     .map((paragraph) => paragraph.join(""))
     .join("");
 
-// Se ignoran los párrafos que tienen menos de n frases
+// Se ignoran los párrafos que tienen más de n frases
 const ignoreParagraphsLessN = (text, n) =>
   text
   .split(".\n")
-  .map(paragraph => 
-    paragraph.split(".")
+  .map(paragraph => paragraph.split(".")
     .filter(paragraph => paragraph != ""))
   .filter(paragraph => paragraph.length <= n)
   .map(sentences => sentences.join("."))
@@ -95,6 +81,19 @@ const addNewParagraphEachLine = (text) =>
   .split(".")
   .map(paragraph => paragraph.replace("\n", ""))
   .join(".\n");
+
+// Solo las primeras n frases de cada párrafo 
+const FirstPhrasesEachParagraph = (text, n) =>
+  text
+  .split(".\n")
+  .map(paragraph => paragraph.split(".", n).join("."))
+  .map((paragraph, index, paragraphs_array) =>
+    index < (paragraphs_array.length - 1)
+    ? (paragraph + ".")
+    : n > 1
+      ? paragraph 
+      : (paragraph + "."))
+  .join("\n");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
@@ -117,12 +116,12 @@ const getFunctionsSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
-    "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
+    "add-max-width": addMaxWidth,
     "add-identation": addIndentation,
     "ignore-short-paragraphs": ignoreShortParagraphs,
-    "add-max-width": addMaxWidth,
     "ignore-long-paragraphs": ignoreParagraphsLessN,
     "each-line-paragraph": addNewParagraphEachLine,
+    "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
     (option_button_id) =>
