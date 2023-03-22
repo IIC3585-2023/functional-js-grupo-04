@@ -20,11 +20,7 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
-//Si solo quiero n primeras frases por parrafo, split cada parrafo
-//luego mapear cada parrafo y split por .?
-//luego dejar solo los primeros n u.u
-
-
+// Solo las primeras n frases de cada párrafo 
 const FirstPhrasesEachParagraph = (text, n) =>
   text
   .split(".\n")
@@ -35,9 +31,52 @@ const FirstPhrasesEachParagraph = (text, n) =>
     : n > 1
       ? paragraph 
       : (paragraph + "."))
-  .join("\n")
-  ;
+  .join("\n");
 
+// El ancho del texto debe ser a lo más ​n​ (sin cortar palabras)
+const addMaxWidth = (text, n) => {
+  const paragraphs = text.split(".\n");
+  return paragraphs
+    .map((paragraph) =>
+      splitStringWithSingleSpaces(paragraph).reduce(
+        (accumulator, new_word) =>
+          accumulator.current_line_characters + new_word.length > n
+            ? {
+                current_line_characters: new_word.length,
+                current_text: accumulator.current_text + "\n" + new_word,
+              }
+            : {
+                current_line_characters:
+                  accumulator.current_line_characters + new_word.length,
+                current_text: accumulator.current_text + new_word,
+              },
+
+        { current_line_characters: 0, current_text: "" }
+      )
+    )
+    .map((paragraphObject) => paragraphObject.current_text)
+    .join(".\n");
+};
+
+// Cada párrafo debe tener ​n​ espacios de sangría
+const addIndentation = (text, n) =>
+  text
+    .split(".\n")
+    .map((paragraph, index) =>
+      index > 0
+        ? paragraph.replace(/^\n*/, "$&" + " ".repeat(n))
+        : " ".repeat(n) + paragraph
+    )
+    .join(".\n");
+
+//Se ignoran los párrafos que tienen menos de ​n​ frases
+const ignoreShortParagraphs = (text, n) =>
+  text
+    .split(/(?<=\.\n)/)
+    .map((paragraph) => paragraph.split(/(?=[\.])/))
+    .filter((sentences) => sentences.length - 1 >= n)
+    .map((paragraph) => paragraph.join(""))
+    .join("");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
@@ -49,7 +88,6 @@ const sCombinator =
 // HTML code
 
 const optionClick = (clicked_button) => {
-  console.log(clicked_button.classList);
   if (clicked_button.classList.contains("option-button-active")) {
     clicked_button.classList.remove("option-button-active");
   } else {
@@ -62,6 +100,9 @@ const getFunctionsSelected = () => {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
     "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
+    "add-identation": addIndentation,
+    "ignore-short-paragraphs": ignoreShortParagraphs,
+    "add-max-width": addMaxWidth,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
     (option_button_id) =>
@@ -79,13 +120,12 @@ const buttonClick = () => {
   const result = document.getElementById("result");
   const functions_selected = getFunctionsSelected();
   const transformText = sCombinator(...functions_selected);
-  //OJO cambie el n a 2 para probar
-  result.innerHTML = transformText(text, (n = 15));
+  result.innerHTML = transformText(text, (n = 3));
 };
 
 //////////////////////////////////////////////////////
 
-// // Clean text helpers
+// // helpers
 
 // trim spaces of every "/n" and replace "\n...\n" with a single "/n"
 const cleanText1 = (text) =>
@@ -93,3 +133,9 @@ const cleanText1 = (text) =>
 
 // if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
 const cleanText2 = (text) => text.replace(/\. +/g, ". ");
+
+const splitStringWithSingleSpaces = (string) =>
+  string
+    .split(/(\s+)/)
+    .map((word) => (word.match(/\s+/) ? word.split("") : word))
+    .flat();
