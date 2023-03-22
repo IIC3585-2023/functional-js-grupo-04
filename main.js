@@ -66,13 +66,13 @@ const ignoreShortParagraphs = (text, n) =>
     .join("");
 
 // Se ignoran los párrafos que tienen más de n frases
-const ignoreParagraphsLessN = (text, n) =>
+const ignoreParagraphsMoreN = (text, n) =>
   text
   .split(".\n")
   .map(paragraph => paragraph.split(".")
     .filter(paragraph => paragraph != ""))
   .filter(paragraph => paragraph.length <= n)
-  .map(sentences => sentences.join("."))
+  .map(sentences => (sentences + "."))
   .join("\n");
 
 // Cada frase debe aparecer en párrafo aparte
@@ -86,13 +86,10 @@ const addNewParagraphEachLine = (text) =>
 const FirstPhrasesEachParagraph = (text, n) =>
   text
   .split(".\n")
-  .map(paragraph => paragraph.split(".", n).join("."))
-  .map((paragraph, index, paragraphs_array) =>
-    index < (paragraphs_array.length - 1)
-    ? (paragraph + ".")
-    : n > 1
-      ? paragraph 
-      : (paragraph + "."))
+  .map(paragraph => paragraph.split(".", n)
+    .filter(paragraph => paragraph != "")
+    .join("."))
+  .map(paragraph => (paragraph + "."))
   .join("\n");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
@@ -119,7 +116,7 @@ const getFunctionsSelected = () => {
     "add-max-width": addMaxWidth,
     "add-identation": addIndentation,
     "ignore-short-paragraphs": ignoreShortParagraphs,
-    "ignore-long-paragraphs": ignoreParagraphsLessN,
+    "ignore-long-paragraphs": ignoreParagraphsMoreN,
     "each-line-paragraph": addNewParagraphEachLine,
     "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
   };
