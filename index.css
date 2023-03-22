@@ -80,7 +80,8 @@ body {
 .option-button {
   background: #c2c2c2;
   color: #111;
-  border: 0;
+  /* border: 0; */
+  border-width: 1px;
   padding: 5px 8px;
   font-family: inherit;
   font-weight: 600;
@@ -91,6 +92,7 @@ body {
   margin-bottom: 0px;
   box-sizing: border-box;
   border-radius: 0.25rem;
+  border-color: rgb(156 163 175);
 }
 
 .option-button-active {
@@ -112,6 +114,7 @@ body {
   cursor: pointer;
   font-size: 16px;
   transition: all 0.2s ease-in-out;
+  border-radius: 0.25rem;
 }
 
 #file::file-selector-button:hover {
