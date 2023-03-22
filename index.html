@@ -40,6 +40,14 @@
         element.click();
         document.body.removeChild(element);
       }
+      
+      const optionClick = (clicked_button) => {
+        if (clicked_button.classList.contains("option-button-active")) {
+          clicked_button.classList.remove("option-button-active");
+        } else {
+          clicked_button.classList.add("option-button-active");
+        }
+      };
     </script>
   </head>
   <body>
