@@ -20,6 +20,25 @@ const addLinesSeparateDot = (text, n) =>
     )
     .join("");
 
+//Si solo quiero n primeras frases por parrafo, split cada parrafo
+//luego mapear cada parrafo y split por .?
+//luego dejar solo los primeros n u.u
+
+
+const FirstPhrasesEachParagraph = (text, n) =>
+  text
+  .split(".\n")
+  .map(paragraph => paragraph.split(".", n).join("."))
+  .map((paragraph, index, paragraphs_array) =>
+    index < (paragraphs_array.length - 1)
+    ? (paragraph + ".")
+    : n > 1
+      ? paragraph 
+      : (paragraph + "."))
+  .join("\n")
+  ;
+
+
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
   (...functions) =>
@@ -42,6 +61,7 @@ const getFunctionsSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
+    "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
     (option_button_id) =>
@@ -59,6 +79,7 @@ const buttonClick = () => {
   const result = document.getElementById("result");
   const functions_selected = getFunctionsSelected();
   const transformText = sCombinator(...functions_selected);
+  //OJO cambie el n a 2 para probar
   result.innerHTML = transformText(text, (n = 15));
 };
 
