@@ -78,6 +78,24 @@ const ignoreShortParagraphs = (text, n) =>
     .map((paragraph) => paragraph.join(""))
     .join("");
 
+// Se ignoran los párrafos que tienen menos de n frases
+const ignoreParagraphsLessN = (text, n) =>
+  text
+  .split(".\n")
+  .map(paragraph => 
+    paragraph.split(".")
+    .filter(paragraph => paragraph != ""))
+  .filter(paragraph => paragraph.length <= n)
+  .map(sentences => sentences.join("."))
+  .join("\n");
+
+// Cada frase debe aparecer en párrafo aparte
+const addNewParagraphEachLine = (text) =>
+  cleanText3(text)
+  .split(".")
+  .map(paragraph => paragraph.replace("\n", ""))
+  .join(".\n");
+
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator =
   (...functions) =>
@@ -103,6 +121,8 @@ const getFunctionsSelected = () => {
     "add-identation": addIndentation,
     "ignore-short-paragraphs": ignoreShortParagraphs,
     "add-max-width": addMaxWidth,
+    "ignore-long-paragraphs": ignoreParagraphsLessN,
+    "each-line-paragraph": addNewParagraphEachLine,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
     (option_button_id) =>
@@ -139,3 +159,6 @@ const splitStringWithSingleSpaces = (string) =>
     .split(/(\s+)/)
     .map((word) => (word.match(/\s+/) ? word.split("") : word))
     .flat();
+
+//If there is some spaces after the dot, it removes them.
+const cleanText3 = (text) => text.replace(/\. +/g, ".");
