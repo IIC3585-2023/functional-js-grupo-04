@@ -56,7 +56,7 @@ const addIndentation = (text, n) =>
     )
     .join(".\n");
 
-//Se ignoran los párrafos que tienen menos de ​n​ frases
+// Se ignoran los párrafos que tienen menos de ​n​ frases
 const ignoreShortParagraphs = (text, n) =>
   text
     .split(/(?<=\.\n)/)
@@ -101,14 +101,6 @@ const sCombinator =
 //////////////////////////////////////////////////////
 // HTML code
 
-const optionClick = (clicked_button) => {
-  if (clicked_button.classList.contains("option-button-active")) {
-    clicked_button.classList.remove("option-button-active");
-  } else {
-    clicked_button.classList.add("option-button-active");
-  }
-};
-
 const getFunctionsSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
@@ -141,13 +133,13 @@ const buttonClick = () => {
 
 //////////////////////////////////////////////////////
 
-// // helpers
+// // Helpers
 
-// trim spaces of every "/n" and replace "\n...\n" with a single "/n"
+// Trim spaces of every "/n" and replace "\n...\n" with a single "/n"
 const cleanText1 = (text) =>
   text.replace(/ +\n/g, "\n").replace(/\n +/g, "\n").replace(/\n+/g, "\n");
 
-// if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
+// If theres a dot followed by a lot of spaces, replace it with a dot followed by one space
 const cleanText2 = (text) => text.replace(/\.+/g, ". ").replace(/\. +/g, ". ");
 
 const splitStringWithSingleSpaces = (string) =>
@@ -156,5 +148,5 @@ const splitStringWithSingleSpaces = (string) =>
     .map((word) => (word.match(/\s+/) ? word.split("") : word))
     .flat();
 
-//If there is some spaces after the dot, it removes them.
+// If there is some spaces after the dot, it removes them.
 const cleanText3 = (text) => text.replace(/\. +/g, ".");
