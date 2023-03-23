@@ -80,8 +80,7 @@ body {
 .option-button {
   background: #c2c2c2;
   color: #111;
-  border: 0;
-  /* border-width: 1px; */
+  border-width: 1px;
   padding: 5px 8px;
   font-family: inherit;
   font-weight: 600;

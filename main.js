@@ -72,7 +72,8 @@ const ignoreParagraphsMoreN = (text, n) =>
   .map(paragraph => paragraph.split(".")
     .filter(paragraph => paragraph != ""))
   .filter(paragraph => paragraph.length <= n)
-  .map(sentences => (sentences + "."))
+  .map(sentences => sentences.join(". ")) // Join sentences in each paragraph
+  .map(paragraph => (paragraph + "."))
   .join("\n");
 
 // Cada frase debe aparecer en párrafo aparte
@@ -81,7 +82,9 @@ const addNewParagraphEachLine = (text) =>
   .split(".")
   .filter(paragraph => paragraph != "")
   .map(paragraph => paragraph.replace("\n", ""))
-  .join(".\n");
+  // .join(".\n");
+  .map(paragraph => (paragraph + "."))
+  .join("\n");
 
 // Solo las primeras n frases de cada párrafo 
 const FirstPhrasesEachParagraph = (text, n) =>
