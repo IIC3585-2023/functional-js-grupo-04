@@ -67,7 +67,7 @@ const ignoreShortParagraphs = (text, n) =>
 
 // Se ignoran los párrafos que tienen más de n frases
 const ignoreParagraphsMoreN = (text, n) =>
-  text
+  cleanText3(text)
   .split(".\n")
   .map(paragraph => paragraph.split(".")
     .filter(paragraph => paragraph != ""))
@@ -79,16 +79,18 @@ const ignoreParagraphsMoreN = (text, n) =>
 const addNewParagraphEachLine = (text) =>
   cleanText3(text)
   .split(".")
+  .filter(paragraph => paragraph != "")
   .map(paragraph => paragraph.replace("\n", ""))
   .join(".\n");
 
 // Solo las primeras n frases de cada párrafo 
 const FirstPhrasesEachParagraph = (text, n) =>
-  text
+  cleanText3(text)
   .split(".\n")
   .map(paragraph => paragraph.split(".", n)
     .filter(paragraph => paragraph != "")
-    .join("."))
+    .join(". "))
+  .filter(paragraph => paragraph != "") // Filter in case that n is 0
   .map(paragraph => (paragraph + "."))
   .join("\n");
 
