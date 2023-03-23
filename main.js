@@ -56,7 +56,7 @@ const addIndentation = (text, n) =>
     )
     .join(".\n");
 
-//Se ignoran los párrafos que tienen menos de ​n​ frases
+// Se ignoran los párrafos que tienen menos de ​n​ frases
 const ignoreShortParagraphs = (text, n) =>
   text
     .split(/(?<=\.\n)/)
@@ -91,7 +91,7 @@ const addNewParagraphEachLine = (text) =>
   .map(paragraph => (paragraph + "."))
   .join("\n");
 
-// Solo las primeras n frases de cada párrafo 
+// Solo las primeras n frases de cada párrafo
 const FirstPhrasesEachParagraph = (text, n) =>
   cleanText3(text)
   .split(".\n")
@@ -103,23 +103,16 @@ const FirstPhrasesEachParagraph = (text, n) =>
   .join("\n");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
-const sCombinator =
-  (...functions) =>
-  (text, n) =>
-    functions.reduce((acc, f) => f(acc, n), text);
+const sCombinator = (functions) => (text, n_array) =>
+  functions.reduce(
+    (acc, f, current_index) =>
+      f(acc, n_array[current_index]), text
+  );
 
 //////////////////////////////////////////////////////
 // HTML code
 
-const optionClick = (clicked_button) => {
-  if (clicked_button.classList.contains("option-button-active")) {
-    clicked_button.classList.remove("option-button-active");
-  } else {
-    clicked_button.classList.add("option-button-active");
-  }
-};
-
-const getFunctionsSelected = () => {
+const getFunctionsAndNSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
@@ -136,30 +129,36 @@ const getFunctionsSelected = () => {
         .getElementById(option_button_id)
         .classList.contains("option-button-active")
   );
-  return filtered_functions.map(
-    (option_button_id) => option_buttons_functions[option_button_id]
+  const functions_selected = filtered_functions
+    .map((option_button_id) => option_buttons_functions[option_button_id])
+    .flat();
+  const n_for_functions = filtered_functions.map((option_button_id) =>
+    parseInt(document.getElementById(option_button_id + "-n").value)
   );
+  return {
+    functions_selected: functions_selected,
+    n_for_functions: n_for_functions,
+  };
 };
 
 const buttonClick = () => {
   const text = document.getElementById("text").value;
   const result = document.getElementById("result");
-  const functions_selected = getFunctionsSelected();
-  const transformText = sCombinator(...functions_selected);
-  const n = document.getElementById("n-input").value;
-  result.innerHTML = transformText(text, n);
+  const { functions_selected, n_for_functions } = getFunctionsAndNSelected();
+  const transformText = sCombinator(functions_selected);
+  result.innerHTML = transformText(text, n_for_functions);
 };
 
 //////////////////////////////////////////////////////
 
-// // helpers
+// // Helpers
 
-// trim spaces of every "/n" and replace "\n...\n" with a single "/n"
+// Trim spaces of every "/n" and replace "\n...\n" with a single "/n"
 const cleanText1 = (text) =>
-  text.replace(/ +\n/g, "\n").replace(/\n+/g, "\n").replace(/\n +/g, "\n");
+  text.replace(/ +\n/g, "\n").replace(/\n +/g, "\n").replace(/\n+/g, "\n");
 
-// if theres a dot followed by a lot of spaces, replace it with a dot followed by one space
-const cleanText2 = (text) => text.replace(/\. +/g, ". ");
+// If theres a dot followed by a lot of spaces, replace it with a dot followed by one space
+const cleanText2 = (text) => text.replace(/\.+/g, ". ").replace(/\. +/g, ". ");
 
 const splitStringWithSingleSpaces = (string) =>
   string
@@ -167,5 +166,5 @@ const splitStringWithSingleSpaces = (string) =>
     .map((word) => (word.match(/\s+/) ? word.split("") : word))
     .flat();
 
-//If there is some spaces after the dot, it removes them.
+// If there is some spaces after the dot, it removes them.
 const cleanText3 = (text) => text.replace(/\. +/g, ".");
