@@ -67,34 +67,40 @@ const ignoreShortParagraphs = (text, n) =>
 
 // Se ignoran los párrafos que tienen más de n frases
 const ignoreParagraphsMoreN = (text, n) =>
-  text
-    .split(".\n")
-    .map((paragraph) =>
-      paragraph.split(".").filter((paragraph) => paragraph != "")
-    )
-    .filter((paragraph) => paragraph.length <= n)
-    .map((sentences) => sentences + ".")
-    .join("\n");
+  cleanText3(text)
+  .split(".\n")
+  .map(paragraph => paragraph.split(".")
+    .filter(paragraph => paragraph != ""))
+  .filter(paragraph => paragraph.length <= n)
+  .map(sentences => sentences.join(". ")) // Join sentences in each paragraph
+  .map(paragraph => (paragraph + "."))
+  .join("\n");
 
 // Cada frase debe aparecer en párrafo aparte
+// Supuesto: las frases van divididas por punto espacio (. ), no hay puntos seguidos (...)
+// Si mezclo esta con la 1 quedan solo dos espacios ya que el espacio seguido 
+// del . se considera como el delimitador
+// Si hay .    . lo considera como una frase
 const addNewParagraphEachLine = (text) =>
-  cleanText3(text)
-    .split(".")
-    .map((paragraph) => paragraph.replace("\n", ""))
-    .join(".\n");
+  text
+  .split(".\n")
+  .join(". ")
+  .split(". ")
+  .filter(paragraph => paragraph != "")
+  .map(paragraph => paragraph.replace(".", ""))
+  .map(paragraph => (paragraph + "."))
+  .join("\n");
 
 // Solo las primeras n frases de cada párrafo
 const FirstPhrasesEachParagraph = (text, n) =>
-  text
-    .split(".\n")
-    .map((paragraph) =>
-      paragraph
-        .split(".", n)
-        .filter((paragraph) => paragraph != "")
-        .join(".")
-    )
-    .map((paragraph) => paragraph + ".")
-    .join("\n");
+  cleanText3(text)
+  .split(".\n")
+  .map(paragraph => paragraph.split(".", n)
+    .filter(paragraph => paragraph != "")
+    .join(". "))
+  .filter(paragraph => paragraph != "") // Filter in case that n is 0
+  .map(paragraph => (paragraph + "."))
+  .join("\n");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator = (functions) => (text, n_array) =>
