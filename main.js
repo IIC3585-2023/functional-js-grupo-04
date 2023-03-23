@@ -83,13 +83,24 @@ const ignoreParagraphsMoreN = (text, n) =>
 // Si hay .    . lo considera como una frase
 const addNewParagraphEachLine = (text) =>
   text
-  .split(".\n")
-  .join(". ")
+  .split("\n")
+  .join(" ")
   .split(". ")
   .filter(paragraph => paragraph != "")
   .map(paragraph => paragraph.replace(".", ""))
   .map(paragraph => (paragraph + "."))
   .join("\n");
+  ;
+
+
+
+  // text
+  // .split(".")
+  // .filter(paragraph => paragraph != "")
+  // .map(paragraph => paragraph.replace("\n", ""))
+  // // .join(".\n");
+  // .map(paragraph => (paragraph + "."))
+  // .join("\n");
 
 // Solo las primeras n frases de cada párrafo
 const FirstPhrasesEachParagraph = (text, n) =>
