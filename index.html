@@ -53,6 +53,37 @@
           input_n.style.backgroundColor = "whitesmoke";
         }
       };
+
+      const createButtons = () => {
+        const ids_buttons = {
+          "add-spaces-followed-dot": "Add spaces followed dot",
+          "add-lines-separate-dot": "Add lines separate dot",
+          "add-max-width": "Add max width",
+          "add-identation": "Add identation",
+          "ignore-short-paragraphs": "Ignore short paragraphs",
+          "ignore-long-paragraphs": "Ignore long paragraphs",
+          "each-line-paragraph": "Each phrase is a new paragraph",
+          "only-first-phrases-each-paragraph": "Only the first n phrases for each paragraph",
+        };
+        const buttons_container = document.querySelector(".formatter-options-container");
+        Object.keys(ids_buttons).forEach((id) => {
+          const container = document.createElement("div");
+          container.classList.add("option-button-container");
+          const button = document.createElement("button");
+          button.id = id; button.classList.add("option-button");
+          button.onclick = () => optionClick(button);
+          button.innerHTML = ids_buttons[id];
+          container.appendChild(button);
+          const input = document.createElement("input");
+          input.type = "number";
+          input.id = id + "-n"; input.classList.add("option-button-n");
+          input.classList.add("option-button-n");
+          input.min = "1"; input.value = "1";
+          input.disabled = true;
+          container.appendChild(input);
+          buttons_container.appendChild(container);
+        });
+      }
     </script>
   </head>
   <body>
@@ -76,144 +107,7 @@ Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vita
 Nam tincidunt congue enim, ut porta lorem lacinia consectetur.
 Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
     >
-    <div class="formatter-options-container">
-      <div class="option-button-container">
-        <button
-          id="add-spaces-followed-dot"
-          class="option-button"
-          onclick="optionClick(this)"
-        >
-          Add spaces followed dot
-        </button>
-        <input
-          type="number"
-          id="add-spaces-followed-dot-n"
-          class="option-button-n"
-          min="1"
-          value="1"
-          disabled
-        />
-      </div>
-      <div class="option-button-container">
-        <button
-          id="add-lines-separate-dot"
-          class="option-button"
-          onclick="optionClick(this)"
-        >
-          Add lines separate dot
-        </button>
-        <input
-          type="number"
-          id="add-lines-separate-dot-n"
-          class="option-button-n"
-          min="0"
-          value="0"
-          disabled
-        />
-      </div>
-      <div class="option-button-container">
-        <button
-          id="add-max-width"
-          class="option-button"
-          onclick="optionClick(this)"
-        >
-          Add max width
-        </button>
-        <input
-          type="number"
-          id="add-max-width-n"
-          class="option-button-n"
-          min="1"
-          value="1"
-          disabled
-        />
-      </div>
-      <div class="option-button-container">
-        <button
-          id="add-identation"
-          class="option-button"
-          onclick="optionClick(this)"
-        >
-          Add identation
-        </button>
-        <input
-          type="number"
-          id="add-identation-n"
-          class="option-button-n"
-          min="1"
-          value="1"
-          disabled
-        />
-      </div>
-      <div class="option-button-container">
-        <button
-          id="ignore-short-paragraphs"
-          class="option-button"
-          onclick="optionClick(this)"
-        >
-          Ignore short paragraphs
-        </button>
-        <input
-          type="number"
-          id="ignore-short-paragraphs-n"
-          class="option-button-n"
-          min="1"
-          value="1"
-          disabled
-        />
-      </div>
-      <div class="option-button-container">
-        <button
-          id="ignore-long-paragraphs"
-          class="option-button"
-          onclick="optionClick(this)"
-        >
-          Ignore long paragraphs
-        </button>
-        <input
-          type="number"
-          id="ignore-long-paragraphs-n"
-          class="option-button-n"
-          min="1"
-          value="1"
-          disabled
-        />
-      </div>
-      <div class="option-button-container">
-        <button
-          id="each-line-paragraph"
-          class="option-button"
-          onclick="optionClick(this)"
-        >
-          Each phrase is a new paragraph
-        </button>
-        <input
-          type="number"
-          id="each-line-paragraph-n"
-          class="option-button-n"
-          min="1"
-          value="1"
-          disabled
-        />
-      </div>
-      <div class="option-button-container">
-        <button
-          id="only-first-phrases-each-paragraph"
-          class="option-button"
-          onclick="optionClick(this)"
-        >
-          Only the first n phrases for each paragraph
-        </button>
-        <input
-          type="number"
-          id="only-first-phrases-each-paragraph-n"
-          class="option-button-n"
-          min="1"
-          value="1"
-          disabled
-        />
-      </div>
-    </div>
+    <div class="formatter-options-container"></div>
     <div class="n-transform-container">
       <button class="btn" onclick="buttonClick()">Transform</button>
     </div>
@@ -227,3 +121,7 @@ Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
     <button class="btn" onclick="downloadFile()">Download Result</button>
   </body>
 </html>
+
+<script>
+  createButtons();
+</script>
