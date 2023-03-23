@@ -83,8 +83,8 @@ const ignoreParagraphsMoreN = (text, n) =>
 // Si hay .    . lo considera como una frase
 const addNewParagraphEachLine = (text) =>
   text
-  .split(".\n")
-  .join(". ")
+  .split("\n")
+  .join(" ")
   .split(". ")
   .filter(paragraph => paragraph != "")
   .map(paragraph => paragraph.replace(".", ""))
