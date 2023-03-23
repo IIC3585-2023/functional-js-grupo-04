@@ -112,10 +112,14 @@ body {
 
 .option-button-n {
   width: 40px;
+  padding-left: 5px;
   border-width: 1px;
   border-radius: 0rem 0.25rem 0.25rem 0rem;
   border-color: rgb(156 163 175);
-  background-color: whitesmoke;
+  background-color: #a2a2a2;
+  border-left: none;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
 }
 
 #file::file-selector-button {

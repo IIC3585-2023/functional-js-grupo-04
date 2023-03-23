@@ -42,10 +42,15 @@
       }
 
       const optionClick = (clicked_button) => {
+        const input_n = document.getElementById(clicked_button.id + "-n");
         if (clicked_button.classList.contains("option-button-active")) {
           clicked_button.classList.remove("option-button-active");
+          input_n.disabled = true;
+          input_n.style.backgroundColor = "#a2a2a2";
         } else {
           clicked_button.classList.add("option-button-active");
+          input_n.disabled = false;
+          input_n.style.backgroundColor = "whitesmoke";
         }
       };
     </script>
@@ -84,9 +89,9 @@ Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
           type="number"
           id="add-spaces-followed-dot-n"
           class="option-button-n"
-          dir="rtl"
           min="1"
           value="1"
+          disabled
         />
       </div>
       <div class="option-button-container">
@@ -101,9 +106,9 @@ Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
           type="number"
           id="add-lines-separate-dot-n"
           class="option-button-n"
-          dir="rtl"
-          min="1"
-          value="1"
+          min="0"
+          value="0"
+          disabled
         />
       </div>
       <div class="option-button-container">
@@ -118,9 +123,9 @@ Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
           type="number"
           id="add-max-width-n"
           class="option-button-n"
-          dir="rtl"
           min="1"
           value="1"
+          disabled
         />
       </div>
       <div class="option-button-container">
@@ -135,9 +140,9 @@ Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
           type="number"
           id="add-identation-n"
           class="option-button-n"
-          dir="rtl"
           min="1"
           value="1"
+          disabled
         />
       </div>
       <div class="option-button-container">
@@ -152,9 +157,9 @@ Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
           type="number"
           id="ignore-short-paragraphs-n"
           class="option-button-n"
-          dir="rtl"
           min="1"
           value="1"
+          disabled
         />
       </div>
       <div class="option-button-container">
@@ -169,9 +174,9 @@ Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
           type="number"
           id="ignore-long-paragraphs-n"
           class="option-button-n"
-          dir="rtl"
           min="1"
           value="1"
+          disabled
         />
       </div>
       <div class="option-button-container">
@@ -186,9 +191,9 @@ Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
           type="number"
           id="each-line-paragraph-n"
           class="option-button-n"
-          dir="rtl"
           min="1"
           value="1"
+          disabled
         />
       </div>
       <div class="option-button-container">
@@ -203,9 +208,9 @@ Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
           type="number"
           id="only-first-phrases-each-paragraph-n"
           class="option-button-n"
-          dir="rtl"
           min="1"
           value="1"
+          disabled
         />
       </div>
     </div>

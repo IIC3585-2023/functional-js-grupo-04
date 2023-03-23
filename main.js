@@ -99,8 +99,8 @@ const FirstPhrasesEachParagraph = (text, n) =>
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator = (functions) => (text, n_array) =>
   functions.reduce(
-    (acc, f, current_index) => f(acc, n_array[current_index]),
-    text
+    (acc, f, current_index) =>
+      f(acc, n_array[current_index]), text
   );
 
 //////////////////////////////////////////////////////
