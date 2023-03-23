@@ -128,7 +128,8 @@ const buttonClick = () => {
   const result = document.getElementById("result");
   const functions_selected = getFunctionsSelected();
   const transformText = sCombinator(...functions_selected);
-  result.innerHTML = transformText(text, (n = 3));
+  const n = document.getElementById("n-input").value;
+  result.innerHTML = transformText(text, n);
 };
 
 //////////////////////////////////////////////////////
