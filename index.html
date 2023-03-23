@@ -40,7 +40,7 @@
         element.click();
         document.body.removeChild(element);
       }
-      
+
       const optionClick = (clicked_button) => {
         if (clicked_button.classList.contains("option-button-active")) {
           clicked_button.classList.remove("option-button-active");
@@ -71,11 +71,145 @@ Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vita
 Nam tincidunt congue enim, ut porta lorem lacinia consectetur.
 Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
     >
-    <div class="n-transform-container">
-      <div class="n-container">
-        <label for="n">Insert n:</label>
-        <input type="number" id="n-input" name="n" min="0" value="3">
+    <div class="formatter-options-container">
+      <div class="option-button-container">
+        <button
+          id="add-spaces-followed-dot"
+          class="option-button"
+          onclick="optionClick(this)"
+        >
+          Add spaces followed dot
+        </button>
+        <input
+          type="number"
+          id="add-spaces-followed-dot-n"
+          class="option-button-n"
+          dir="rtl"
+          min="1"
+          value="1"
+        />
       </div>
+      <div class="option-button-container">
+        <button
+          id="add-lines-separate-dot"
+          class="option-button"
+          onclick="optionClick(this)"
+        >
+          Add lines separate dot
+        </button>
+        <input
+          type="number"
+          id="add-lines-separate-dot-n"
+          class="option-button-n"
+          dir="rtl"
+          min="1"
+          value="1"
+        />
+      </div>
+      <div class="option-button-container">
+        <button
+          id="add-max-width"
+          class="option-button"
+          onclick="optionClick(this)"
+        >
+          Add max width
+        </button>
+        <input
+          type="number"
+          id="add-max-width-n"
+          class="option-button-n"
+          dir="rtl"
+          min="1"
+          value="1"
+        />
+      </div>
+      <div class="option-button-container">
+        <button
+          id="add-identation"
+          class="option-button"
+          onclick="optionClick(this)"
+        >
+          Add identation
+        </button>
+        <input
+          type="number"
+          id="add-identation-n"
+          class="option-button-n"
+          dir="rtl"
+          min="1"
+          value="1"
+        />
+      </div>
+      <div class="option-button-container">
+        <button
+          id="ignore-short-paragraphs"
+          class="option-button"
+          onclick="optionClick(this)"
+        >
+          Ignore short paragraphs
+        </button>
+        <input
+          type="number"
+          id="ignore-short-paragraphs-n"
+          class="option-button-n"
+          dir="rtl"
+          min="1"
+          value="1"
+        />
+      </div>
+      <div class="option-button-container">
+        <button
+          id="ignore-long-paragraphs"
+          class="option-button"
+          onclick="optionClick(this)"
+        >
+          Ignore long paragraphs
+        </button>
+        <input
+          type="number"
+          id="ignore-long-paragraphs-n"
+          class="option-button-n"
+          dir="rtl"
+          min="1"
+          value="1"
+        />
+      </div>
+      <div class="option-button-container">
+        <button
+          id="each-line-paragraph"
+          class="option-button"
+          onclick="optionClick(this)"
+        >
+          Each line is a new paragraph
+        </button>
+        <input
+          type="number"
+          id="each-line-paragraph-n"
+          class="option-button-n"
+          dir="rtl"
+          min="1"
+          value="1"
+        />
+      </div>
+      <div class="option-button-container">
+        <button
+          id="only-first-phrases-each-paragraph"
+          class="option-button"
+          onclick="optionClick(this)"
+        >
+          Only the first phrases for each paragraph
+        </button>
+        <input
+          type="number"
+          id="only-first-phrases-each-paragraph-n"
+          class="option-button-n"
+          dir="rtl"
+          min="1"
+          value="1"
+        />
+      </div>
+    </div>
+    <div class="n-transform-container">
       <button class="btn" onclick="buttonClick()">Transform</button>
     </div>
     <textarea
@@ -85,64 +219,7 @@ Donec ut libero sed arcu vehicula ultricies a non tortor.</textarea
       placeholder="Result"
       readonly
     ></textarea>
-    <div class="formatter-options-container">
-      <button
-        id="add-spaces-followed-dot"
-        class="option-button"
-        onclick="optionClick(this)"
-      >
-        Add spaces followed dot
-      </button>
-      <button
-        id="add-lines-separate-dot"
-        class="option-button"
-        onclick="optionClick(this)"
-      >
-        Add lines separate dot
-      </button>
-      <button
-        id="add-max-width"
-        class="option-button"
-        onclick="optionClick(this)"
-      >
-        Add max width
-      </button>
-      <button
-        id="add-identation"
-        class="option-button"
-        onclick="optionClick(this)"
-      >
-        Add identation
-      </button>
-      <button
-        id="ignore-short-paragraphs"
-        class="option-button"
-        onclick="optionClick(this)"
-      >
-        Ignore short paragraphs
-      </button>
-      <button
-        id="ignore-long-paragraphs"
-        class="option-button"
-        onclick="optionClick(this)"
-      >
-        Ignore long paragraphs
-      </button>
-      <button
-        id="each-line-paragraph"
-        class="option-button"
-        onclick="optionClick(this)"
-      >
-        Each line is a new paragraph
-      </button>
-      <button
-        id="only-first-phrases-each-paragraph"
-        class="option-button"
-        onclick="optionClick(this)"
-      >
-        Only the first phrases for each paragraph
-      </button>
-    </div>
+
     <button class="btn" onclick="downloadFile()">Download Result</button>
   </body>
 </html>

@@ -68,40 +68,45 @@ const ignoreShortParagraphs = (text, n) =>
 // Se ignoran los párrafos que tienen más de n frases
 const ignoreParagraphsMoreN = (text, n) =>
   text
-  .split(".\n")
-  .map(paragraph => paragraph.split(".")
-    .filter(paragraph => paragraph != ""))
-  .filter(paragraph => paragraph.length <= n)
-  .map(sentences => (sentences + "."))
-  .join("\n");
+    .split(".\n")
+    .map((paragraph) =>
+      paragraph.split(".").filter((paragraph) => paragraph != "")
+    )
+    .filter((paragraph) => paragraph.length <= n)
+    .map((sentences) => sentences + ".")
+    .join("\n");
 
 // Cada frase debe aparecer en párrafo aparte
 const addNewParagraphEachLine = (text) =>
   cleanText3(text)
-  .split(".")
-  .map(paragraph => paragraph.replace("\n", ""))
-  .join(".\n");
+    .split(".")
+    .map((paragraph) => paragraph.replace("\n", ""))
+    .join(".\n");
 
-// Solo las primeras n frases de cada párrafo 
+// Solo las primeras n frases de cada párrafo
 const FirstPhrasesEachParagraph = (text, n) =>
   text
-  .split(".\n")
-  .map(paragraph => paragraph.split(".", n)
-    .filter(paragraph => paragraph != "")
-    .join("."))
-  .map(paragraph => (paragraph + "."))
-  .join("\n");
+    .split(".\n")
+    .map((paragraph) =>
+      paragraph
+        .split(".", n)
+        .filter((paragraph) => paragraph != "")
+        .join(".")
+    )
+    .map((paragraph) => paragraph + ".")
+    .join("\n");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
-const sCombinator =
-  (...functions) =>
-  (text, n) =>
-    functions.reduce((acc, f) => f(acc, n), text);
+const sCombinator = (functions) => (text, n_array) =>
+  functions.reduce(
+    (acc, f, current_index) => f(acc, n_array[current_index]),
+    text
+  );
 
 //////////////////////////////////////////////////////
 // HTML code
 
-const getFunctionsSelected = () => {
+const getFunctionsAndNSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
@@ -118,18 +123,24 @@ const getFunctionsSelected = () => {
         .getElementById(option_button_id)
         .classList.contains("option-button-active")
   );
-  return filtered_functions.map(
-    (option_button_id) => option_buttons_functions[option_button_id]
+  const functions_selected = filtered_functions
+    .map((option_button_id) => option_buttons_functions[option_button_id])
+    .flat();
+  const n_for_functions = filtered_functions.map((option_button_id) =>
+    parseInt(document.getElementById(option_button_id + "-n").value)
   );
+  return {
+    functions_selected: functions_selected,
+    n_for_functions: n_for_functions,
+  };
 };
 
 const buttonClick = () => {
   const text = document.getElementById("text").value;
   const result = document.getElementById("result");
-  const functions_selected = getFunctionsSelected();
-  const transformText = sCombinator(...functions_selected);
-  const n = document.getElementById("n-input").value;
-  result.innerHTML = transformText(text, n);
+  const { functions_selected, n_for_functions } = getFunctionsAndNSelected();
+  const transformText = sCombinator(functions_selected);
+  result.innerHTML = transformText(text, n_for_functions);
 };
 
 //////////////////////////////////////////////////////
