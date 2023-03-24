@@ -1,30 +1,28 @@
 // Cada frase debe comenzar con ​n​ espacios en blanco (después de un punto seguido)
 const addSpacesFollowedDot = (text, n) =>
-  _.chain(cleanText2(text))
+  cleanText2(text)
     .split(". ")
     .map((sentence, index) =>
       index > 0
         ? (sentence = "." + " ".repeat(n) + sentence)
         : (sentence = sentence)
     )
-    .join("")
-    .value();
+    .join("");
 
 // Cada párrafo debe estar separado por ​n​ líneas (después de un punto aparte)
 const addLinesSeparateDot = (text, n) =>
-  _.chain(cleanText1(text))
+  cleanText1(text)
     .split(".\n")
     .map((sentence, index) =>
       index > 0
         ? (sentence = "." + "\n".repeat(n + 1) + sentence)
         : (sentence = sentence)
     )
-    .join("")
-    .value();
+    .join("");
 
 // El ancho del texto debe ser a lo más ​n​ (sin cortar palabras)
 const addMaxWidth = (text, n) => {
-  const paragraphWidthReducer = (accumulator, new_word) => {
+  const textWidthReducer = (accumulator, new_word) => {
     if (new_word === "\n") {
       return {
         current_line_characters: 0,
@@ -46,8 +44,8 @@ const addMaxWidth = (text, n) => {
 
   const wrappText = _.flow([
     (text) => splitStringWithSingleSpaces(text),
-    (paragraphs) =>
-      _.reduce(paragraphs, paragraphWidthReducer, {
+    (words) =>
+      _.reduce(words, textWidthReducer, {
         current_line_characters: 0,
         current_text: "",
       }),
@@ -58,15 +56,14 @@ const addMaxWidth = (text, n) => {
 
 // Cada párrafo debe tener ​n​ espacios de sangría
 const addIndentation = (text, n) =>
-  _.chain(text)
+  text
     .split(".\n")
     .map((paragraph, index) =>
       index > 0
         ? paragraph.replace(/^\n*/, "$&" + " ".repeat(n))
         : " ".repeat(n) + paragraph
     )
-    .join(".\n")
-    .value();
+    .join(".\n");
 
 // Se ignoran los párrafos según la función comparadora
 const ignoreParagraphs = (comparator_function, text, n) =>
@@ -182,8 +179,7 @@ const cleanText2 = (text) =>
 const cleanText3 = (text) => text.replace(/\. +/g, ".");
 
 const splitStringWithSingleSpaces = (string) =>
-  _.chain(string)
+  string
     .split(/(\s+)/)
     .map((word) => (word.match(/\s+/) ? word.split("") : word))
-    .flatten()
-    .value();
+    .flat();
