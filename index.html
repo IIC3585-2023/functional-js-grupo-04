@@ -82,13 +82,18 @@
           container.appendChild(input);
           buttons_container.appendChild(container);
         });
-        
+        const id_each_line = "each-line-paragraph";
         const each_line_button = document.createElement("button");
-        each_line_button.id = "each-line-paragraph"; 
+        each_line_button.id = id_each_line;
         each_line_button.classList.add("option-button-each-line");
         each_line_button.onclick = () => optionClick(each_line_button);
         each_line_button.innerHTML = "Each phrase is a new paragraph";
+        const each_line_input = document.createElement("input");
+        each_line_input.id = id_each_line + "-n";
+        each_line_input.classList.add("option-button-n");
+        each_line_input.style.display = "none";
         buttons_container.appendChild(each_line_button);
+        buttons_container.appendChild(each_line_input);
       }
     </script>
   </head>
