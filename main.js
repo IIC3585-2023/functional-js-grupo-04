@@ -158,7 +158,7 @@ const cleanText1 = (text) =>
   text.replace(/ +\n/g, "\n").replace(/\n +/g, "\n").replace(/\n+/g, "\n");
 
 // If theres a dot followed by a lot of spaces, replace it with a dot followed by one space
-const cleanText2 = (text) => text.replace(/\.+/g, ". ").replace(/\. +/g, ". ");
+const cleanText2 = (text) => text.replace(/\.([^\n])/g, '. $1').replace(/\. +/g, ". ");
 
 const splitStringWithSingleSpaces = (string) =>
   string
