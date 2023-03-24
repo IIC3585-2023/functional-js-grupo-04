@@ -98,7 +98,6 @@ const FirstPhrasesEachParagraph = (text, n) =>
   .map(paragraph => paragraph.split(".", n)
     .filter(paragraph => paragraph != "")
     .join(". "))
-  .filter(paragraph => paragraph != "") // Filter in case that n is 0
   .map(paragraph => (paragraph + "."))
   .join("\n");
 
