@@ -77,10 +77,6 @@ const ignoreParagraphsMoreN = (text, n) =>
   .join("\n");
 
 // Cada frase debe aparecer en párrafo aparte
-// Supuesto: las frases van divididas por punto espacio (. ), no hay puntos seguidos (...)
-// Si mezclo esta con la 1 quedan solo dos espacios ya que el espacio seguido 
-// del . se considera como el delimitador
-// Si hay .    . lo considera como una frase
 const addNewParagraphEachLine = (text) =>
   text
   .split("\n")

@@ -62,7 +62,6 @@
           "add-identation": "Add identation",
           "ignore-short-paragraphs": "Ignore short paragraphs",
           "ignore-long-paragraphs": "Ignore long paragraphs",
-          "each-line-paragraph": "Each phrase is a new paragraph",
           "only-first-phrases-each-paragraph": "Only the first n phrases for each paragraph",
         };
         const buttons_container = document.querySelector(".formatter-options-container");
@@ -83,6 +82,13 @@
           container.appendChild(input);
           buttons_container.appendChild(container);
         });
+        
+        const each_line_button = document.createElement("button");
+        each_line_button.id = "each-line-paragraph"; 
+        each_line_button.classList.add("option-button-each-line");
+        each_line_button.onclick = () => optionClick(each_line_button);
+        each_line_button.innerHTML = "Each phrase is a new paragraph";
+        buttons_container.appendChild(each_line_button);
       }
     </script>
   </head>
