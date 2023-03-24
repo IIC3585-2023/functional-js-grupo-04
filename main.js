@@ -76,7 +76,7 @@ const ignoreShortParagraphs = ignoreParagraphsCurried(
 );
 
 // Se ignoran los párrafos que tienen más de n frases
-const ignoreParagraphsMoreN = ignoreParagraphsCurried(
+const ignoreLongParagraphs = ignoreParagraphsCurried(
   (paragraph_lenght, n) => paragraph_lenght - 1 <= n
 );
 
@@ -92,7 +92,7 @@ const addNewParagraphEachLine = (text) =>
     .join("\n");
 
 // Solo las primeras n frases de cada párrafo
-const FirstPhrasesEachParagraph = (text, n) =>
+const firstPhrasesEachParagraph = (text, n) =>
   cleanText3(text)
     .split(".\n")
     .map((paragraph) =>
@@ -120,9 +120,9 @@ const getFunctionsAndNSelected = () => {
     "add-lines-separate-dot": addLinesSeparateDot,
     "add-identation": addIndentation,
     "ignore-short-paragraphs": ignoreShortParagraphs,
-    "ignore-long-paragraphs": ignoreParagraphsMoreN,
+    "ignore-long-paragraphs": ignoreLongParagraphs,
     "each-line-paragraph": addNewParagraphEachLine,
-    "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
+    "only-first-phrases-each-paragraph": firstPhrasesEachParagraph,
     "add-max-width": addMaxWidth,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
