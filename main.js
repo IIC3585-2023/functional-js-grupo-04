@@ -68,9 +68,15 @@ const addIndentation = (text, n) =>
 // Se ignoran los párrafos según la función comparadora
 const ignoreParagraphs = (comparator_function, text, n) =>
   _.chain(text)
-    .split(/(?<=\.\n)/)
+    // simil to .split(/(?<=\.\n)/)
+    .split(".\n")
+    .map((paragraph, index) => 
+      index < text.split(".\n").length - 1
+        ? paragraph + ".\n"
+        : paragraph
+      )
+    ///////////////////////////////
     .map((paragraph) => paragraph.split(/(?=[\.])/))
-
     .filter((paragraph_splitted) =>
       comparator_function(paragraph_splitted.length, n)
     )
@@ -82,12 +88,12 @@ const ignoreParagraphsCurried = _.curry(ignoreParagraphs);
 
 // Se ignoran los párrafos que tienen menos de ​n​ frases
 const ignoreShortParagraphs = ignoreParagraphsCurried(
-  (paragraph_lenght, n) => paragraph_lenght - 1 >= n
+  (paragraph_length, n) => paragraph_length - 1 >= n
 );
 
 // Se ignoran los párrafos que tienen más de n frases
 const ignoreLongParagraphs = ignoreParagraphsCurried(
-  (paragraph_lenght, n) => paragraph_lenght - 1 <= n
+  (paragraph_length, n) => paragraph_length - 1 <= n
 );
 
 // Cada frase debe aparecer en párrafo aparte
