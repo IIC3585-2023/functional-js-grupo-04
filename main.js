@@ -1,64 +1,76 @@
 // Cada frase debe comenzar con ​n​ espacios en blanco (después de un punto seguido)
 const addSpacesFollowedDot = (text, n) =>
-  cleanText2(text)
+  _.chain(cleanText2(text))
     .split(". ")
     .map((sentence, index) =>
       index > 0
         ? (sentence = "." + " ".repeat(n) + sentence)
         : (sentence = sentence)
     )
-    .join("");
+    .join("")
+    .value();
 
 // Cada párrafo debe estar separado por ​n​ líneas (después de un punto aparte)
 const addLinesSeparateDot = (text, n) =>
-  cleanText1(text)
+  _.chain(cleanText1(text))
     .split(".\n")
     .map((sentence, index) =>
       index > 0
         ? (sentence = "." + "\n".repeat(n + 1) + sentence)
         : (sentence = sentence)
     )
-    .join("");
+    .join("")
+    .value();
 
 // El ancho del texto debe ser a lo más ​n​ (sin cortar palabras)
 const addMaxWidth = (text, n) => {
-  const paragraphs = text.split(".\n");
-  return paragraphs
-    .map((paragraph) =>
-      splitStringWithSingleSpaces(paragraph).reduce(
-        (accumulator, new_word) =>
-          accumulator.current_line_characters + new_word.length > n
-            ? {
-                current_line_characters: new_word.length,
-                current_text: accumulator.current_text + "\n" + new_word,
-              }
-            : {
-                current_line_characters:
-                  accumulator.current_line_characters + new_word.length,
-                current_text: accumulator.current_text + new_word,
-              },
+  const paragraphWidthReducer = (accumulator, new_word) => {
+    if (new_word === "\n") {
+      return {
+        current_line_characters: 0,
+        current_text: accumulator.current_text + new_word,
+      };
+    } else {
+      return accumulator.current_line_characters + new_word.length > n
+        ? {
+            current_line_characters: new_word.length,
+            current_text: accumulator.current_text + "\n" + new_word,
+          }
+        : {
+            current_line_characters:
+              accumulator.current_line_characters + new_word.length,
+            current_text: accumulator.current_text + new_word,
+          };
+    }
+  };
 
-        { current_line_characters: 0, current_text: "" }
-      )
-    )
-    .map((paragraphObject) => paragraphObject.current_text)
-    .join(".\n");
+  const wrappText = _.flow([
+    (text) => splitStringWithSingleSpaces(text),
+    (paragraphs) =>
+      _.reduce(paragraphs, paragraphWidthReducer, {
+        current_line_characters: 0,
+        current_text: "",
+      }),
+  ]);
+
+  return wrappText(text).current_text;
 };
 
 // Cada párrafo debe tener ​n​ espacios de sangría
 const addIndentation = (text, n) =>
-  text
+  _.chain(text)
     .split(".\n")
     .map((paragraph, index) =>
       index > 0
         ? paragraph.replace(/^\n*/, "$&" + " ".repeat(n))
         : " ".repeat(n) + paragraph
     )
-    .join(".\n");
+    .join(".\n")
+    .value();
 
 // Se ignoran los párrafos según la función comparadora
 const ignoreParagraphs = (comparator_function, text, n) =>
-  text
+  _.chain(text)
     .split(/(?<=\.\n)/)
     .map((paragraph) => paragraph.split(/(?=[\.])/))
 
@@ -66,7 +78,8 @@ const ignoreParagraphs = (comparator_function, text, n) =>
       comparator_function(paragraph_splitted.length, n)
     )
     .map((paragraph_splitted) => paragraph_splitted.join(""))
-    .join("");
+    .join("")
+    .value();
 
 const ignoreParagraphsCurried = _.curry(ignoreParagraphs);
 
@@ -82,18 +95,19 @@ const ignoreLongParagraphs = ignoreParagraphsCurried(
 
 // Cada frase debe aparecer en párrafo aparte
 const addNewParagraphEachLine = (text) =>
-  text
+  _.chain(text)
     .split("\n")
     .join(" ")
     .split(". ")
     .filter((paragraph) => paragraph != "")
     .map((paragraph) => paragraph.replace(".", ""))
     .map((paragraph) => paragraph + ".")
-    .join("\n");
+    .join("\n")
+    .value();
 
 // Solo las primeras n frases de cada párrafo
 const firstPhrasesEachParagraph = (text, n) =>
-  cleanText3(text)
+  _.chain(cleanText3(text))
     .split(".\n")
     .map((paragraph) =>
       paragraph
@@ -102,7 +116,8 @@ const firstPhrasesEachParagraph = (text, n) =>
         .join(". ")
     )
     .map((paragraph) => paragraph + ".")
-    .join("\n");
+    .join("\n")
+    .value();
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator = (functions) => (text, n_array) =>
@@ -117,12 +132,12 @@ const sCombinator = (functions) => (text, n_array) =>
 const getFunctionsAndNSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
-    "add-lines-separate-dot": addLinesSeparateDot,
-    "add-identation": addIndentation,
     "ignore-short-paragraphs": ignoreShortParagraphs,
     "ignore-long-paragraphs": ignoreLongParagraphs,
     "each-line-paragraph": addNewParagraphEachLine,
-    "only-first-phrases-each-paragraph": firstPhrasesEachParagraph,
+    "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
+    "add-lines-separate-dot": addLinesSeparateDot,
+    "add-identation": addIndentation,
     "add-max-width": addMaxWidth,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
@@ -167,7 +182,8 @@ const cleanText2 = (text) =>
 const cleanText3 = (text) => text.replace(/\. +/g, ".");
 
 const splitStringWithSingleSpaces = (string) =>
-  string
+  _.chain(string)
     .split(/(\s+)/)
     .map((word) => (word.match(/\s+/) ? word.split("") : word))
-    .flat();
+    .flatten()
+    .value();
