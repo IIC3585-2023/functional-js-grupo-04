@@ -68,26 +68,30 @@ const addIndentation = (text, n) =>
     .join(".\n")
     .value();
 
-// Se ignoran los párrafos que tienen menos de ​n​ frases
-const ignoreShortParagraphs = (text, n) =>
-  text
+// Se ignoran los párrafos según la función comparadora
+const ignoreParagraphs = (comparator_function, text, n) =>
+  _.chain(text)
     .split(/(?<=\.\n)/)
     .map((paragraph) => paragraph.split(/(?=[\.])/))
-    .filter((sentences) => sentences.length - 1 >= n)
-    .map((paragraph) => paragraph.join(""))
-    .join("");
+
+    .filter((paragraph_splitted) =>
+      comparator_function(paragraph_splitted.length, n)
+    )
+    .map((paragraph_splitted) => paragraph_splitted.join(""))
+    .join("")
+    .value();
+
+const ignoreParagraphsCurried = _.curry(ignoreParagraphs);
+
+// Se ignoran los párrafos que tienen menos de ​n​ frases
+const ignoreShortParagraphs = ignoreParagraphsCurried(
+  (paragraph_lenght, n) => paragraph_lenght - 1 >= n
+);
 
 // Se ignoran los párrafos que tienen más de n frases
-const ignoreParagraphsMoreN = (text, n) =>
-  cleanText3(text)
-    .split(".\n")
-    .map((paragraph) =>
-      paragraph.split(".").filter((paragraph) => paragraph != "")
-    )
-    .filter((paragraph) => paragraph.length <= n)
-    .map((sentences) => sentences.join(". ")) // Join sentences in each paragraph
-    .map((paragraph) => paragraph + ".")
-    .join("\n");
+const ignoreLongParagraphs = ignoreParagraphsCurried(
+  (paragraph_lenght, n) => paragraph_lenght - 1 <= n
+);
 
 // Cada frase debe aparecer en párrafo aparte
 const addNewParagraphEachLine = (text) =>
@@ -102,7 +106,7 @@ const addNewParagraphEachLine = (text) =>
     .value();
 
 // Solo las primeras n frases de cada párrafo
-const FirstPhrasesEachParagraph = (text, n) =>
+const firstPhrasesEachParagraph = (text, n) =>
   _.chain(cleanText3(text))
     .split(".\n")
     .map((paragraph) =>
@@ -129,7 +133,7 @@ const getFunctionsAndNSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "ignore-short-paragraphs": ignoreShortParagraphs,
-    "ignore-long-paragraphs": ignoreParagraphsMoreN,
+    "ignore-long-paragraphs": ignoreLongParagraphs,
     "each-line-paragraph": addNewParagraphEachLine,
     "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
     "add-lines-separate-dot": addLinesSeparateDot,
@@ -174,13 +178,12 @@ const cleanText1 = (text) =>
 const cleanText2 = (text) =>
   text.replace(/\.([^\n])/g, ". $1").replace(/\. +/g, ". ");
 
+// If there is some spaces after the dot, it removes them.
+const cleanText3 = (text) => text.replace(/\. +/g, ".");
+
 const splitStringWithSingleSpaces = (string) =>
   _.chain(string)
-
     .split(/(\s+)/)
     .map((word) => (word.match(/\s+/) ? word.split("") : word))
     .flatten()
     .value();
-
-// If there is some spaces after the dot, it removes them.
-const cleanText3 = (text) => text.replace(/\. +/g, ".");
