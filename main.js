@@ -135,7 +135,7 @@ const getFunctionsAndNSelected = () => {
     "ignore-short-paragraphs": ignoreShortParagraphs,
     "ignore-long-paragraphs": ignoreLongParagraphs,
     "each-line-paragraph": addNewParagraphEachLine,
-    "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
+    "only-first-phrases-each-paragraph": firstPhrasesEachParagraph,
     "add-lines-separate-dot": addLinesSeparateDot,
     "add-identation": addIndentation,
     "add-max-width": addMaxWidth,
