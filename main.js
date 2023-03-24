@@ -56,52 +56,59 @@ const addIndentation = (text, n) =>
     )
     .join(".\n");
 
-// Se ignoran los párrafos que tienen menos de ​n​ frases
-const ignoreShortParagraphs = (text, n) =>
+// Se ignoran los párrafos según la función comparadora
+const ignoreParagraphs = (comparator_function, text, n) =>
   text
     .split(/(?<=\.\n)/)
     .map((paragraph) => paragraph.split(/(?=[\.])/))
-    .filter((sentences) => sentences.length - 1 >= n)
-    .map((paragraph) => paragraph.join(""))
+
+    .filter((paragraph_splitted) =>
+      comparator_function(paragraph_splitted.length, n)
+    )
+    .map((paragraph_splitted) => paragraph_splitted.join(""))
     .join("");
 
+const ignoreParagraphsCurried = _.curry(ignoreParagraphs);
+
+// Se ignoran los párrafos que tienen menos de ​n​ frases
+const ignoreShortParagraphs = ignoreParagraphsCurried(
+  (paragraph_lenght, n) => paragraph_lenght - 1 >= n
+);
+
 // Se ignoran los párrafos que tienen más de n frases
-const ignoreParagraphsMoreN = (text, n) =>
-  cleanText3(text)
-  .split(".\n")
-  .map(paragraph => paragraph.split(".")
-    .filter(paragraph => paragraph != ""))
-  .filter(paragraph => paragraph.length <= n)
-  .map(sentences => sentences.join(". ")) // Join sentences in each paragraph
-  .map(paragraph => (paragraph + "."))
-  .join("\n");
+const ignoreParagraphsMoreN = ignoreParagraphsCurried(
+  (paragraph_lenght, n) => paragraph_lenght - 1 <= n
+);
 
 // Cada frase debe aparecer en párrafo aparte
 const addNewParagraphEachLine = (text) =>
   text
-  .split("\n")
-  .join(" ")
-  .split(". ")
-  .filter(paragraph => paragraph != "")
-  .map(paragraph => paragraph.replace(".", ""))
-  .map(paragraph => (paragraph + "."))
-  .join("\n");
+    .split("\n")
+    .join(" ")
+    .split(". ")
+    .filter((paragraph) => paragraph != "")
+    .map((paragraph) => paragraph.replace(".", ""))
+    .map((paragraph) => paragraph + ".")
+    .join("\n");
 
 // Solo las primeras n frases de cada párrafo
 const FirstPhrasesEachParagraph = (text, n) =>
   cleanText3(text)
-  .split(".\n")
-  .map(paragraph => paragraph.split(".", n)
-    .filter(paragraph => paragraph != "")
-    .join(". "))
-  .map(paragraph => (paragraph + "."))
-  .join("\n");
+    .split(".\n")
+    .map((paragraph) =>
+      paragraph
+        .split(".", n)
+        .filter((paragraph) => paragraph != "")
+        .join(". ")
+    )
+    .map((paragraph) => paragraph + ".")
+    .join("\n");
 
 // Combinator inspired by: const S = f => g => x => f(x)(g(x))
 const sCombinator = (functions) => (text, n_array) =>
   functions.reduce(
-    (acc, f, current_index) =>
-      f(acc, n_array[current_index]), text
+    (acc, f, current_index) => f(acc, n_array[current_index]),
+    text
   );
 
 //////////////////////////////////////////////////////
@@ -111,12 +118,12 @@ const getFunctionsAndNSelected = () => {
   const option_buttons_functions = {
     "add-spaces-followed-dot": addSpacesFollowedDot,
     "add-lines-separate-dot": addLinesSeparateDot,
-    "add-max-width": addMaxWidth,
     "add-identation": addIndentation,
     "ignore-short-paragraphs": ignoreShortParagraphs,
     "ignore-long-paragraphs": ignoreParagraphsMoreN,
     "each-line-paragraph": addNewParagraphEachLine,
     "only-first-phrases-each-paragraph": FirstPhrasesEachParagraph,
+    "add-max-width": addMaxWidth,
   };
   const filtered_functions = Object.keys(option_buttons_functions).filter(
     (option_button_id) =>
@@ -153,13 +160,14 @@ const cleanText1 = (text) =>
   text.replace(/ +\n/g, "\n").replace(/\n +/g, "\n").replace(/\n+/g, "\n");
 
 // If theres a dot followed by a lot of spaces, replace it with a dot followed by one space
-const cleanText2 = (text) => text.replace(/\.([^\n])/g, '. $1').replace(/\. +/g, ". ");
+const cleanText2 = (text) =>
+  text.replace(/\.([^\n])/g, ". $1").replace(/\. +/g, ". ");
+
+// If there is some spaces after the dot, it removes them.
+const cleanText3 = (text) => text.replace(/\. +/g, ".");
 
 const splitStringWithSingleSpaces = (string) =>
   string
     .split(/(\s+)/)
     .map((word) => (word.match(/\s+/) ? word.split("") : word))
     .flat();
-
-// If there is some spaces after the dot, it removes them.
-const cleanText3 = (text) => text.replace(/\. +/g, ".");
