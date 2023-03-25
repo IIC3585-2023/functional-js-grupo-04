@@ -109,7 +109,7 @@ const addNewParagraphEachLine = (text) =>
     .value();
 
 // Solo las primeras n frases de cada párrafo
-const firstPhrasesEachParagraph = (text, n) =>
+const firstPhrasesEachParagraph = (text, n) => 
   _.chain(cleanText3(text))
     .split(".\n")
     .map((paragraph) =>
@@ -118,6 +118,7 @@ const firstPhrasesEachParagraph = (text, n) =>
         .filter((paragraph) => paragraph != "")
         .join(". ")
     )
+    .filter((paragraph) => paragraph != "")
     .map((paragraph) => paragraph + ".")
     .join("\n")
     .value();
