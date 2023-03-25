@@ -62,39 +62,52 @@
           "add-identation": "Add identation",
           "ignore-short-paragraphs": "Ignore short paragraphs",
           "ignore-long-paragraphs": "Ignore long paragraphs",
-          "only-first-phrases-each-paragraph": "Only the first n phrases for each paragraph",
+          "only-first-phrases-each-paragraph":
+            "Only the first n phrases for each paragraph",
         };
-        const buttons_container = document.querySelector(".formatter-options-container");
+        const buttons_container = document.querySelector(
+          ".formatter-options-container"
+        );
+        let html_option_buttons = "";
         Object.keys(ids_buttons).forEach((id) => {
-          const container = document.createElement("div");
-          container.classList.add("option-button-container");
-          const button = document.createElement("button");
-          button.id = id; button.classList.add("option-button");
-          button.onclick = () => optionClick(button);
-          button.innerHTML = ids_buttons[id];
-          container.appendChild(button);
-          const input = document.createElement("input");
-          input.type = "number";
-          input.id = id + "-n"; input.classList.add("option-button-n");
-          input.classList.add("option-button-n");
-          input.min = "1"; input.value = "1";
-          input.disabled = true;
-          container.appendChild(input);
-          buttons_container.appendChild(container);
+          html_option_buttons =
+            html_option_buttons +
+            `<div class="option-button-container">
+                  <button
+                    id=${id}
+                    class="option-button"
+                    onclick="optionClick(this)"
+                  >
+                    ${ids_buttons[id]}
+                  </button>
+                  <input
+                    type="number"
+                    id=${id + "-n"}
+                    class="option-button-n"
+                    min="1"
+                    value="1"
+                    disabled=true
+                  />
+                </div>
+          `;
         });
-        const id_each_line = "each-line-paragraph";
-        const each_line_button = document.createElement("button");
-        each_line_button.id = id_each_line;
-        each_line_button.classList.add("option-button-each-line");
-        each_line_button.onclick = () => optionClick(each_line_button);
-        each_line_button.innerHTML = "Each phrase is a new paragraph";
-        const each_line_input = document.createElement("input");
-        each_line_input.id = id_each_line + "-n";
-        each_line_input.classList.add("option-button-n");
-        each_line_input.style.display = "none";
-        buttons_container.appendChild(each_line_button);
-        buttons_container.appendChild(each_line_input);
-      }
+        html_option_buttons =
+          html_option_buttons +
+          `     <div class="option-button-container">
+                  <button
+                    id="each-line-paragraph"
+                    class="option-button"
+                    onclick="optionClick(this)"
+                  >
+                  Each phrase is a new paragraph
+                  </button>                 
+                  <input
+                    id="each-line-paragraph-n"
+                    style = "display:none"
+                  /> 
+                </div>`;
+        buttons_container.innerHTML = html_option_buttons;
+      };
     </script>
   </head>
   <body>
