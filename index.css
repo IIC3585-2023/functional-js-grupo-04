@@ -115,6 +115,10 @@ body {
   border-color: rgb(156 163 175);
 }
 
+.option-button-each-line:hover {
+  background: #434343;
+  color: white;
+}
 
 .option-button-active {
   background-color: #111 !important;
