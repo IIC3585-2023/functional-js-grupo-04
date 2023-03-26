@@ -24,34 +24,20 @@ const addLinesSeparateDot = (text, n) =>
 const addMaxWidth = (text, n) => {
   const textWidthReducer = (accumulator, new_word) => {
     if (new_word === "\n") {
-      return {
-        current_line_characters: 0,
-        current_text: accumulator.current_text + new_word,
-      };
+      return [...accumulator, new_word];
     } else {
-      return accumulator.current_line_characters + new_word.length > n
-        ? {
-            current_line_characters: new_word.length,
-            current_text: accumulator.current_text + "\n" + new_word,
-          }
-        : {
-            current_line_characters:
-              accumulator.current_line_characters + new_word.length,
-            current_text: accumulator.current_text + new_word,
-          };
+      return _.last(accumulator).length + new_word.length > n
+        ? [...accumulator, new_word]
+        : [..._.dropRight(accumulator), _.last(accumulator) + new_word];
     }
   };
 
   const wrappText = _.flow([
     (text) => splitStringWithSingleSpaces(text),
-    (words) =>
-      _.reduce(words, textWidthReducer, {
-        current_line_characters: 0,
-        current_text: "",
-      }),
+    (words) => _.reduce(words, textWidthReducer, [""]),
   ]);
 
-  return wrappText(text).current_text;
+  return wrappText(text).join("\n");
 };
 
 // Cada párrafo debe tener ​n​ espacios de sangría
@@ -68,15 +54,9 @@ const addIndentation = (text, n) =>
 // Se ignoran los párrafos según la función comparadora
 const ignoreParagraphs = (comparator_function, text, n) =>
   _.chain(text)
-    // simil to .split(/(?<=\.\n)/)
-    .split(".\n")
-    .map((paragraph, index) => 
-      index < text.split(".\n").length - 1
-        ? paragraph + ".\n"
-        : paragraph
-      )
-    ///////////////////////////////
+    .split(/(?<=\.\n)/)
     .map((paragraph) => paragraph.split(/(?=[\.])/))
+
     .filter((paragraph_splitted) =>
       comparator_function(paragraph_splitted.length, n)
     )
@@ -88,12 +68,12 @@ const ignoreParagraphsCurried = _.curry(ignoreParagraphs);
 
 // Se ignoran los párrafos que tienen menos de ​n​ frases
 const ignoreShortParagraphs = ignoreParagraphsCurried(
-  (paragraph_length, n) => paragraph_length - 1 >= n
+  (paragraph_lenght, n) => paragraph_lenght - 1 >= n
 );
 
 // Se ignoran los párrafos que tienen más de n frases
 const ignoreLongParagraphs = ignoreParagraphsCurried(
-  (paragraph_length, n) => paragraph_length - 1 <= n
+  (paragraph_lenght, n) => paragraph_lenght - 1 <= n
 );
 
 // Cada frase debe aparecer en párrafo aparte
@@ -187,5 +167,5 @@ const cleanText3 = (text) => text.replace(/\. +/g, ".");
 const splitStringWithSingleSpaces = (string) =>
   string
     .split(/(\s+)/)
-    .map((word) => (word.match(/\s+/) ? word.split("") : word))
+    .map((word) => (word.match(/ +/) ? word.split("") : word))
     .flat();
