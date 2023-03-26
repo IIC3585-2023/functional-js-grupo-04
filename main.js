@@ -24,7 +24,7 @@ const addLinesSeparateDot = (text, n) =>
 const addMaxWidth = (text, n) => {
   const textWidthReducer = (accumulator, new_word) => {
     if (new_word === "\n") {
-      return [...accumulator, new_word];
+      return [...accumulator, ""];
     } else {
       return _.last(accumulator).length + new_word.length > n
         ? [...accumulator, new_word]
