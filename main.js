@@ -24,34 +24,20 @@ const addLinesSeparateDot = (text, n) =>
 const addMaxWidth = (text, n) => {
   const textWidthReducer = (accumulator, new_word) => {
     if (new_word === "\n") {
-      return {
-        current_line_characters: 0,
-        current_text: accumulator.current_text + new_word,
-      };
+      return [...accumulator, new_word];
     } else {
-      return accumulator.current_line_characters + new_word.length > n
-        ? {
-            current_line_characters: new_word.length,
-            current_text: accumulator.current_text + "\n" + new_word,
-          }
-        : {
-            current_line_characters:
-              accumulator.current_line_characters + new_word.length,
-            current_text: accumulator.current_text + new_word,
-          };
+      return _.last(accumulator).length + new_word.length > n
+        ? [...accumulator, new_word]
+        : [..._.dropRight(accumulator), _.last(accumulator) + new_word];
     }
   };
 
   const wrappText = _.flow([
     (text) => splitStringWithSingleSpaces(text),
-    (words) =>
-      _.reduce(words, textWidthReducer, {
-        current_line_characters: 0,
-        current_text: "",
-      }),
+    (words) => _.reduce(words, textWidthReducer, [""]),
   ]);
 
-  return wrappText(text).current_text;
+  return wrappText(text).join("\n");
 };
 
 // Cada párrafo debe tener ​n​ espacios de sangría
@@ -70,11 +56,9 @@ const ignoreParagraphs = (comparator_function, text, n) =>
   _.chain(text)
     // simil to .split(/(?<=\.\n)/)
     .split(".\n")
-    .map((paragraph, index) => 
-      index < text.split(".\n").length - 1
-        ? paragraph + ".\n"
-        : paragraph
-      )
+    .map((paragraph, index) =>
+      index < text.split(".\n").length - 1 ? paragraph + ".\n" : paragraph
+    )
     ///////////////////////////////
     .map((paragraph) => paragraph.split(/(?=[\.])/))
     .filter((paragraph_splitted) =>
@@ -109,7 +93,7 @@ const addNewParagraphEachLine = (text) =>
     .value();
 
 // Solo las primeras n frases de cada párrafo
-const firstPhrasesEachParagraph = (text, n) => 
+const firstPhrasesEachParagraph = (text, n) =>
   _.chain(text)
     .split(".\n")
     .map((paragraph) =>
