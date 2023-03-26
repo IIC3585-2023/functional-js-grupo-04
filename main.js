@@ -110,7 +110,7 @@ const addNewParagraphEachLine = (text) =>
 
 // Solo las primeras n frases de cada párrafo
 const firstPhrasesEachParagraph = (text, n) => 
-  _.chain(cleanText3(text))
+  _.chain(text)
     .split(".\n")
     .map((paragraph) =>
       paragraph
@@ -181,9 +181,6 @@ const cleanText1 = (text) =>
 // If theres a dot followed by a lot of spaces, replace it with a dot followed by one space
 const cleanText2 = (text) =>
   text.replace(/\.([^\n])/g, ". $1").replace(/\. +/g, ". ");
-
-// If there is some spaces after the dot, it removes them.
-const cleanText3 = (text) => text.replace(/\. +/g, ".");
 
 const splitStringWithSingleSpaces = (string) =>
   string
