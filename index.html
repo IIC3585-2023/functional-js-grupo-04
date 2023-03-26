@@ -56,14 +56,16 @@
 
       const createButtons = () => {
         const ids_buttons = {
-          "add-spaces-followed-dot": "Add spaces followed dot",
-          "add-lines-separate-dot": "Add lines separate dot",
-          "add-max-width": "Add max width",
-          "add-identation": "Add identation",
-          "ignore-short-paragraphs": "Ignore short paragraphs",
-          "ignore-long-paragraphs": "Ignore long paragraphs",
-          "only-first-phrases-each-paragraph":
+          "add-spaces-followed-dot": ["Add spaces followed dot", 4],
+          "add-lines-separate-dot": ["Add lines separate dot", 3],
+          "add-max-width": ["Add max width", 25],
+          "add-identation": ["Add identation", 4],
+          "ignore-short-paragraphs": ["Ignore short paragraphs", 2],
+          "ignore-long-paragraphs": ["Ignore long paragraphs", 2],
+          "only-first-phrases-each-paragraph": [
             "Only the first n phrases for each paragraph",
+            2,
+          ],
         };
         const buttons_container = document.querySelector(
           ".formatter-options-container"
@@ -78,14 +80,14 @@
                     class="option-button"
                     onclick="optionClick(this)"
                   >
-                    ${ids_buttons[id]}
+                    ${ids_buttons[id][0]}
                   </button>
                   <input
                     type="number"
                     id=${id + "-n"}
                     class="option-button-n"
                     min="1"
-                    value="1"
+                    value="${ids_buttons[id][1]}"
                     disabled=true
                   />
                 </div>
