@@ -107,11 +107,11 @@ const firstPhrasesEachParagraph = (text, n) =>
     .join("\n")
     .value();
 
-// Combinator inspired by: const S = f => g => x => f(x)(g(x))
-const sCombinator = (functions) => (text, n_array) =>
+// inspired by: const S = f => g => x => f(x)(g(x))
+const composeFunction = (functions) => (text, n_array) =>
   functions.reduce(
     (acc, f, current_index) => f(acc, n_array[current_index]),
-    text
+    text  // initial value
   );
 
 //////////////////////////////////////////////////////
@@ -150,7 +150,7 @@ const buttonClick = () => {
   const text = document.getElementById("text").value;
   const result = document.getElementById("result");
   const { functions_selected, n_for_functions } = getFunctionsAndNSelected();
-  const transformText = sCombinator(functions_selected);
+  const transformText = composeFunction(functions_selected);
   result.innerHTML = transformText(text, n_for_functions);
 };
 
